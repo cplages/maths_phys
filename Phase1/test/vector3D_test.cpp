@@ -1,7 +1,7 @@
 #include <iostream>
 #include <assert.h>
 
-#include "vector3D.hpp"
+#include "../src/vector3D.hpp"
 
 using namespace std;
 
