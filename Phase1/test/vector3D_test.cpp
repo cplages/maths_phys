@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdio.h>
 #include <assert.h>
 
 #include "../src/vector3D.hpp"
@@ -99,5 +100,6 @@ int main() {
   proj_test();
   distance_test();
   triple_product_test();
+  
   printf("done!\n");
 }
