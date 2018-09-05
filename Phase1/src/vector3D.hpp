@@ -20,8 +20,15 @@ public:
   Vector3D proj( Vector3D *v);
   float distance(Vector3D *v);
   float triple_product(Vector3D *v,Vector3D *w);
+  void display();
+  
   bool operator ==(Vector3D const& v);
   bool operator !=(Vector3D const& v);
+  Vector3D& operator =(Vector3D const& v);
+  //Vector3D& operator +(Vector3D const& v);
+  //Vector3D& operator *(float const& k);
+  
+
   ~Vector3D();
 };  
   

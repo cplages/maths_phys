@@ -69,6 +69,10 @@ float Vector3D::triple_product(Vector3D *v,Vector3D *w) {
   return this->dot_product(&result_cross_product);
 }
 
+void Vector3D::display(){
+  printf("(%f, %f, %f) ", this->x, this->y, this->z);
+}
+
 Vector3D::~Vector3D(){
 }
 
@@ -86,5 +90,12 @@ bool Vector3D::operator !=(Vector3D const& v) {
   return true;
 }
 
+
+Vector3D& Vector3D::operator =(const Vector3D& v){
+  this->x = v.x;
+  this->y = v.y;
+  this->z = v.z;
+  return *this;
+}
 
 

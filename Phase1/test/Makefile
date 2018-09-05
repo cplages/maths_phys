@@ -1,9 +1,9 @@
 cc= g++
 CFLAGS= -Wall
-SRC=vector3D_test.cpp
-OBJ=vector3D_test.o
+SRC=vector3D_test.cpp particule_test.cpp launcher.cpp
+OBJ=vector3D_test.o particule_test.o launcher.o
 
-NDEP=vector3D.o
+NDEP=vector3D.o particule.o
 LDEP=../src
 DEP = $(patsubst %,$(LDEP)/%,$(NDEP))
 
