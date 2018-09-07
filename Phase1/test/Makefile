@@ -23,6 +23,8 @@ $(LDEP)/%.o: $(LDEP)/%.c
 	$(cc) -c -o $@ $< $(CFlAGS)
 
 clean:
-	rm test
-	rm $(DEP)
-	rm $(OBJ)
+	rm -f test
+	rm -f $(DEP)
+	rm -f $(OBJ)
+	rm -f *~
+	rm -f *#

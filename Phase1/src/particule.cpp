@@ -47,13 +47,21 @@ void Particule::set_mass(float m0){
 
 void Particule::integer(float t){
   //Update position
-  Vector3D vt = this->velocity.mult_scal(t);
-  Vector3D new_p = this->position.add(&vt);
+  //Vector3D vt = this->velocity.mult_scal(t);
+  //Vector3D new_p = this->position.add(&vt);
+  this->velocity.display();
+  Vector3D vt = this->velocity * t;
+  this->velocity.display();
+  Vector3D new_p = this->position + vt;
+  
   this->position = new_p;
   
   //Update velocity
-  Vector3D at = this->acceleration.mult_scal(t);
-  Vector3D new_v = this->velocity.mult_scal(pow(this->dumping, t)).add(&at);
+  //Vector3D at = this->acceleration.mult_scal(t);
+  //Vector3D new_v = this->velocity.mult_scal(pow(this->dumping, t)).add(&at);
+  Vector3D at = this->acceleration * t;
+  Vector3D new_v = this->velocity * pow(this->dumping, t) + at;
+
   this->velocity = new_v;
 }
 
