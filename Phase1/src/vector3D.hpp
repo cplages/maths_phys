@@ -11,6 +11,10 @@ private:
 public:
   Vector3D();
   Vector3D(float x0, float y0, float z0);
+
+  float get_x();
+  float get_y();
+  float get_z();
   Vector3D add(Vector3D const *v) const;
   Vector3D mult_scal(float k) const;
   Vector3D composant_product(Vector3D *v) const;

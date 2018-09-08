@@ -9,12 +9,19 @@ DEP = $(patsubst %,$(LDEP)/%,$(NDEP))
 
 all:compile link run
 
+reset_draw: clean draw
+	./draw
+
 compile: $(OBJ)
 
 link: $(DEP) $(OBJ)
 	g++ -o test $^
 run: link
 	./test
+
+draw: $(DEP)
+	g++ -o draw $^ particule_draw.cpp -lGLU -lGL -lglut
+
 
 %.o: %.c
 	$(cc) -c -o $@ $< $(CFlAGS)

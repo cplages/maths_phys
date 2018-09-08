@@ -24,9 +24,14 @@ Particule::Particule(Vector3D p0, Vector3D v0, float m0, float g0, float d0){
   else {
     this->inverse_mass = 1 / m0;
   }
-  this->gravity = Vector3D(0,0,-g0);
+  //  this->gravity = Vector3D(0,0,-g0);
+  this->gravity = Vector3D(0,-g0,0);
   this->acceleration = this->gravity;
   this->dumping = d0;
+}
+
+Vector3D Particule::get_position() {
+  return this->position;
 }
 
 float Particule::get_inverse_mass(){
@@ -49,9 +54,7 @@ void Particule::integer(float t){
   //Update position
   //Vector3D vt = this->velocity.mult_scal(t);
   //Vector3D new_p = this->position.add(&vt);
-  this->velocity.display();
   Vector3D vt = this->velocity * t;
-  this->velocity.display();
   Vector3D new_p = this->position + vt;
   
   this->position = new_p;
@@ -72,6 +75,16 @@ void Particule::display(){
   printf("\t velocity = ");
   this->velocity.display();
   printf("\n");
+}
+
+Particule& Particule::operator =(Particule const& p) {
+  this->position = p.position;
+  this->velocity = p.velocity;
+  this->acceleration = p.acceleration;
+  this->inverse_mass = p.inverse_mass;
+  this->gravity = p.gravity;
+  this->dumping = p.dumping;
+  return *this;
 }
 
 Particule::~Particule(){

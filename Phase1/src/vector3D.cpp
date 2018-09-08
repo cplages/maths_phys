@@ -16,6 +16,18 @@ Vector3D::Vector3D(float x0, float y0, float z0) {
   this->z  = z0;
 }
 
+float Vector3D::get_x() {
+  return this->x;
+}
+
+float Vector3D::get_y() {
+  return this->y;
+}
+
+float Vector3D::get_z() {
+  return this->z;
+}
+
 Vector3D Vector3D::add(Vector3D const *v) const{
   float new_x = this->x + v->x;
   float new_y = this->y + v->y;
