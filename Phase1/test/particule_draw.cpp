@@ -7,6 +7,21 @@
 #include "../src/particule.hpp"
 
 int WINDOW_SIZE = 1600;
+int WINDOW_POSITION_X = 100;
+int WINDOW_POSITION_Y = 100;
+
+int CAMERA_EYE_X = 70;
+int CAMERA_EYE_Y = -20;
+int CAMERA_EYE_Z = 100;
+int CAMERA_VIEW_X = 70;
+int CAMERA_VIEW_Y = -20;
+int CAMERA_VIEW_Z = 0;
+int CAMERA_UP_X = 0;
+int CAMERA_UP_Y = 1;
+int CAMERA_UP_Z = 0;
+
+
+
 
 Particule current;
 Particule *container;
@@ -18,6 +33,7 @@ float interval = 1.0/30.0;
 Vector3D old_p;
 
 bool launch = false;
+bool stop = false;
 
 void display(void)
 {
@@ -29,11 +45,17 @@ void display(void)
   
   
   Vector3D p = current.get_position();
-  
-  glTranslated(p.get_x() - old_p.get_x(), p.get_y() - old_p.get_y(), p.get_z() - old_p.get_z());
-  glutSolidSphere(1,30,30);
-  old_p = p;
+  /* if(p.get_x() >= (CAMERA_EYE_X *2)) {
+    stop = true;
+    printf("STOP!\n");
+  }
+  else {*/
+    glTranslated(p.get_x() - old_p.get_x(), p.get_y() - old_p.get_y(), p.get_z() - old_p.get_z());
+  //glVertex3f(p.get_x(), p.get_y(), p.get_z());
+    glutSolidSphere(1,30,30);
 
+    // }
+  old_p = p;
   glutSwapBuffers();
   glutPostRedisplay();
 }
@@ -48,11 +70,13 @@ void idle_func(void) {
     //multiply by 1000 due to sleep function taking millisecond in argument.
     usleep(interval*1000);
   }
-  else if( time >= animation_time && launch) {
+  else if( (time >= animation_time /*|| stop*/) && launch) {
+    //stop = false;
     launch = false;
     time = 0.0f;
     old_p = Vector3D();
     glPopMatrix();
+    printf("go out!\n");
   }
   glutPostRedisplay();
 }
@@ -128,9 +152,9 @@ int main(int argc, char** argv)
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE);
   glutInitWindowSize(WINDOW_SIZE, WINDOW_SIZE);
-  glutInitWindowPosition(100, 100);
+  glutInitWindowPosition(WINDOW_POSITION_X, WINDOW_POSITION_Y);
   glutCreateWindow("particule launcher");
-  gluLookAt(70, -20, 100, 70, -20, 0, 0, 1, 0);  
+  gluLookAt(CAMERA_EYE_X, CAMERA_EYE_Y, CAMERA_EYE_Z, CAMERA_VIEW_X, CAMERA_VIEW_Y, CAMERA_VIEW_Z, CAMERA_UP_X, CAMERA_UP_Y, CAMERA_UP_Z);  
   glutKeyboardFunc(handler_event);
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
