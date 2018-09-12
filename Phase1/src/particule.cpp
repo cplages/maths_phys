@@ -26,6 +26,7 @@ Particule::Particule(Vector3D p0, Vector3D v0, float m0, float g0, float d0){
   else {
     this->inverse_mass = 1 / m0;
   }
+  //gravity is a vector on the Y axis.
   this->gravity = Vector3D(0,-g0,0);
   this->acceleration = this->gravity;
   this->dumping = d0;
@@ -54,16 +55,24 @@ void Particule::set_mass(float m0){
 // Update the position and velocity of the particule
 void Particule::integrate(float t){
   //Update position
+  
+  //version without operators
   //Vector3D vt = this->velocity.mult_scal(t);
   //Vector3D new_p = this->position.add(&vt);
+  
+  //version with operators
   Vector3D vt = this->velocity * t;
   Vector3D new_p = this->position + vt;
 
   this->position = new_p;
 
   //Update velocity
+  
+  //version without operators
   //Vector3D at = this->acceleration.mult_scal(t);
   //Vector3D new_v = this->velocity.mult_scal(pow(this->dumping, t)).add(&at);
+
+  //version with operators
   Vector3D at = this->acceleration * t;
   Vector3D new_v = this->velocity * pow(this->dumping, t) + at;
 

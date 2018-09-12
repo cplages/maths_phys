@@ -6,6 +6,11 @@
 
 using namespace std;
 
+
+/*
+  test all vector3D methods
+*/
+
 void equal_test() {
   Vector3D u = Vector3D(1.0f, 1.0f, 1.0f);
   Vector3D v = Vector3D(1.0f, 1.0f, 4.0f);

@@ -17,12 +17,16 @@ private:
   float z;
 
 public:
+  //constructors
   Vector3D();
   Vector3D(float x0, float y0, float z0);
 
+  //getters
   float get_x();
   float get_y();
   float get_z();
+
+  //usual vector operations
   Vector3D add(Vector3D const *v) const;
   Vector3D mult_scal(float k) const;
   Vector3D composant_product(Vector3D *v) const;
@@ -34,6 +38,7 @@ public:
   float triple_product(Vector3D *v,Vector3D *w) const;
   void display();
 
+  //operators
   bool operator ==(Vector3D const& v);
   bool operator !=(Vector3D const& v);
   Vector3D& operator =(Vector3D const& v);
@@ -41,6 +46,7 @@ public:
   ~Vector3D();
 };
 
+//binary operators outside the class;
 Vector3D operator +(Vector3D const& v, Vector3D const& w);
 Vector3D operator *(Vector3D const& v, float const& k);
 

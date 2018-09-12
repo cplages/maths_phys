@@ -3,7 +3,7 @@
 
 #include "../src/particule.hpp"
 
-
+//test which print the particule information or a simulated animation
 void test_gun(){
   float interval = 0.0333;
   float time = 0;

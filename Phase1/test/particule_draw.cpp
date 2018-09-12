@@ -16,10 +16,10 @@ int WINDOW_SIZE = 1600;
 int WINDOW_POSITION_X = 100;
 int WINDOW_POSITION_Y = 100;
 
-int CAMERA_EYE_X = 70;
+int CAMERA_EYE_X = 150;
 int CAMERA_EYE_Y = -20;
-int CAMERA_EYE_Z = 500;
-int CAMERA_VIEW_X = 70;
+int CAMERA_EYE_Z = 250;
+int CAMERA_VIEW_X = 150;
 int CAMERA_VIEW_Y = -20;
 int CAMERA_VIEW_Z = 0;
 int CAMERA_UP_X = 0;
@@ -37,7 +37,6 @@ float interval = 1.0/30.0;
 Vector3D old_p;
 
 bool launch = false;
-bool stop = false;
 
 // Display function called every frame
 void display(void)
@@ -51,15 +50,9 @@ void display(void)
 
   Vector3D p = current.get_position();
 
-  if(p.get_x() >= 200 && launch) {
-    stop = true;
-
-  }
-
-//    glTranslated(p.get_x() - old_p.get_x(), p.get_y() - old_p.get_y(), p.get_z() - old_p.get_z());
-    //glVertex3f(p.get_x(), p.get_y(), p.get_z());
-    glutSolidSphere(1,30,30);
-
+  glTranslated(p.get_x() - old_p.get_x(), p.get_y() - old_p.get_y(), p.get_z() - old_p.get_z());
+  glutSolidSphere(1,30,30);
+  
   old_p = p;
   glutSwapBuffers();
   glutPostRedisplay();
@@ -67,15 +60,14 @@ void display(void)
 
 // Integration of the particule during the animation
 void idle_func(void) {
-  if(time < animation_time && !stop && launch) {
+  if(time < animation_time && launch) {
     //give to integrate the time between two frame
     current.integrate(interval);
     time += interval;
     //multiply by 1000 due to sleep function taking millisecond in argument.
     usleep(interval*1000);
   }
-  else if( (time >= animation_time || stop) && launch) {
-    stop = false;
+  else if( time >= animation_time  && launch) {
     launch = false;
     time = 0.0f;
     old_p = Vector3D();
@@ -95,7 +87,7 @@ void reshape(int width, int height)
 		 45,
 		 float(width)/float(height),
 		 0.1,
-		 500
+		 250
 		 );
   glMatrixMode(GL_MODELVIEW);
 }
@@ -119,13 +111,11 @@ void init_particules() {
 
 // Catch the input of the player
 void handler_event(unsigned char key, int x, int y) {
-  int end = 577 - (577/2) - CAMERA_EYE_X;
   if(launch == false) {
     switch(key) {
     case '1':
       current = container[0];
       glColor3f(1.0,1.0,1.0);
-      glTranslated(end, 0, 0);
       break;
     case '2':
       current = container[1];
