@@ -2,11 +2,11 @@
 #include "vector3D_test.hpp"
 #include "particule_test.hpp"
 
-
+// Launcher of the Vector3D and Particule test
 
 int main(){
 
-  printf("Test vecteur :\n");
+  printf("Vector3D tests ... ");
   equal_test();
   add_test();
   mult_scal_test();
@@ -18,10 +18,13 @@ int main(){
   distance_test();
   triple_product_test();
 
-  printf("Test particule :\n");
+  printf("done !\n");
+
+
+  printf("Particule test ... \n");
   test_gun();
 
   printf("Done !\n");
-  
+
   return 0;
 }

@@ -12,7 +12,7 @@ void test_gun(){
   for(int i = 0; i<10; i++){
     time = i * interval;
     printf("Time = %f\n", time);
-    gun_bullet.integer(time);
+    gun_bullet.integrate(time);
     gun_bullet.display();
   }
   

@@ -6,13 +6,19 @@
 #include "../src/vector3D.hpp"
 #include "../src/particule.hpp"
 
+/* GLUT Particule Launcher animations
+
+- 4 differents particules availables
+
+*/
+
 int WINDOW_SIZE = 1600;
 int WINDOW_POSITION_X = 100;
 int WINDOW_POSITION_Y = 100;
 
 int CAMERA_EYE_X = 70;
 int CAMERA_EYE_Y = -20;
-int CAMERA_EYE_Z = 250;
+int CAMERA_EYE_Z = 500;
 int CAMERA_VIEW_X = 70;
 int CAMERA_VIEW_Y = -20;
 int CAMERA_VIEW_Z = 0;
@@ -33,6 +39,7 @@ Vector3D old_p;
 bool launch = false;
 bool stop = false;
 
+// Display function called every frame
 void display(void)
 {
   glClear
@@ -58,13 +65,12 @@ void display(void)
   glutPostRedisplay();
 }
 
+// Integration of the particule during the animation
 void idle_func(void) {
   if(time < animation_time && !stop && launch) {
-    //give to integer the time between two frame
-    current.integer(interval);
+    //give to integrate the time between two frame
+    current.integrate(interval);
     time += interval;
-    //current.display();
-    //printf("time: %f \n", time);
     //multiply by 1000 due to sleep function taking millisecond in argument.
     usleep(interval*1000);
   }
@@ -79,6 +85,7 @@ void idle_func(void) {
   glutPostRedisplay();
 }
 
+// Reshape the window size if necessary
 void reshape(int width, int height)
 {
   glViewport(0,0,width,height);
@@ -88,12 +95,12 @@ void reshape(int width, int height)
 		 45,
 		 float(width)/float(height),
 		 0.1,
-		 250
+		 500
 		 );
   glMatrixMode(GL_MODELVIEW);
-  printf("RESHAAAAAPE\n" );
 }
 
+// Initialisation of the 4 types of particules
 void init_particules() {
   int size = 4;
   Particule gun_bullet = Particule(Vector3D(), Vector3D(35,0,0), 2, 1, 0.7);
@@ -110,13 +117,15 @@ void init_particules() {
   current = *(container);
 }
 
+// Catch the input of the player
 void handler_event(unsigned char key, int x, int y) {
+  int end = 577 - (577/2) - CAMERA_EYE_X;
   if(launch == false) {
     switch(key) {
     case '1':
       current = container[0];
       glColor3f(1.0,1.0,1.0);
-      glTranslated(220, 0, 0);
+      glTranslated(end, 0, 0);
       break;
     case '2':
       current = container[1];
@@ -142,7 +151,7 @@ void handler_event(unsigned char key, int x, int y) {
   glutPostRedisplay();
 }
 
-
+// Print basic instructions for the player
 void display_init(){
   printf("Welcome to the Particule Launcher !\n");
   printf("You have 4 particules availables : gun bullet, fire ball, laser and canon. Push 1 to 4 respectively to choose one.\n");

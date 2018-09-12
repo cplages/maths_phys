@@ -1,6 +1,8 @@
 #ifndef _VECTOR_3D_TEST
 #define _VECTOR_3D_TEST
 
+// Test file of Vector3D Class
+
 void  equal_test();
 void  add_test();
 void  mult_scal_test();

@@ -4,6 +4,7 @@
 
 #include "particule.hpp"
 
+// Basic constructor
 Particule::Particule() {
   this->position = Vector3D();
   this->velocity = Vector3D();
@@ -13,10 +14,11 @@ Particule::Particule() {
   this->dumping = 0;
 }
 
-
+// Basic constructor with variables
 Particule::Particule(Vector3D p0, Vector3D v0, float m0, float g0, float d0){
   this->position = p0;
   this->velocity = v0;
+  //Checking if the mass is not null
   if (m0 == 0){
     printf("Masse nulle impossible\n");
     this->inverse_mass = FLT_MAX;
@@ -24,12 +26,12 @@ Particule::Particule(Vector3D p0, Vector3D v0, float m0, float g0, float d0){
   else {
     this->inverse_mass = 1 / m0;
   }
-  //  this->gravity = Vector3D(0,0,-g0);
   this->gravity = Vector3D(0,-g0,0);
   this->acceleration = this->gravity;
   this->dumping = d0;
 }
 
+//Getters and setters
 Vector3D Particule::get_position() {
   return this->position;
 }
@@ -47,18 +49,18 @@ void Particule::set_mass(float m0){
   else {
     this->inverse_mass = 1 / m0;
   }
-} 
+}
 
-
-void Particule::integer(float t){
+// Update the position and velocity of the particule
+void Particule::integrate(float t){
   //Update position
   //Vector3D vt = this->velocity.mult_scal(t);
   //Vector3D new_p = this->position.add(&vt);
   Vector3D vt = this->velocity * t;
   Vector3D new_p = this->position + vt;
-  
+
   this->position = new_p;
-  
+
   //Update velocity
   //Vector3D at = this->acceleration.mult_scal(t);
   //Vector3D new_v = this->velocity.mult_scal(pow(this->dumping, t)).add(&at);
@@ -68,6 +70,7 @@ void Particule::integer(float t){
   this->velocity = new_v;
 }
 
+// Print some attributes of the particule
 void Particule::display(){
   printf("Particule : ");
   printf("\t position = ");
@@ -77,6 +80,7 @@ void Particule::display(){
   printf("\n");
 }
 
+// Equal operator
 Particule& Particule::operator =(Particule const& p) {
   this->position = p.position;
   this->velocity = p.velocity;
@@ -87,7 +91,6 @@ Particule& Particule::operator =(Particule const& p) {
   return *this;
 }
 
+// Destructor
 Particule::~Particule(){
 }
-
-
