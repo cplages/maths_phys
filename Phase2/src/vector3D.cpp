@@ -126,6 +126,14 @@ Vector3D& Vector3D::operator =(const Vector3D& v){
   return *this;
 }
 
+// Add the vector v to itself
+Vector3D& Vector3D::operator +=(const Vector3D& v){
+  this->x += v.x;
+  this->y += v.y;
+  this->z += v.z;
+  return *this;
+}
+
 // Addition operator
 Vector3D operator +(Vector3D const& v, Vector3D const& w) {
   Vector3D result = v.add(&w);

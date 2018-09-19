@@ -1,7 +1,7 @@
 cc= g++
 CFLAGS= -Wall 
-SRC=vector3D.cpp particule.cpp
-OBJ=vector3D.o particule.o
+SRC=vector3D.cpp particule.cpp force_register.cpp
+OBJ=vector3D.o particule.o force_register.o
 
 all: compile
 

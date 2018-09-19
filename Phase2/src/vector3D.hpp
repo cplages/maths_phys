@@ -42,6 +42,7 @@ public:
   bool operator ==(Vector3D const& v);
   bool operator !=(Vector3D const& v);
   Vector3D& operator =(Vector3D const& v);
+  Vector3D& operator += (Vector3D const& v);
 
   ~Vector3D();
 };
