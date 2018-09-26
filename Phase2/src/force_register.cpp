@@ -26,3 +26,7 @@ int ForceRegister::count() {
   return forces.size();
 }
 
+ForceRegister::records ForceRegister::get_force_register(){
+  return forces;
+}
+

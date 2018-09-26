@@ -29,6 +29,9 @@ public:
 
   Vector3D get_position();
   
+  Vector3D get_velocity();
+  
+
   float get_inverse_mass();
   void set_mass(float m0);
   

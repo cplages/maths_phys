@@ -43,6 +43,10 @@ Vector3D Particule::get_position() {
   return this->position;
 }
 
+Vector3D Particule::get_velocity() {
+  return this->velocity;
+}
+
 float Particule::get_inverse_mass(){
   return inverse_mass;
 }
@@ -60,29 +64,21 @@ void Particule::set_mass(float m0){
 
 // Update the position and velocity of the particule
 void Particule::integrate(float t){
-  //Update position
+  this->acceleration = this->accum_force * this->inverse_mass;
   
-  //version without operators
-  //Vector3D vt = this->velocity.mult_scal(t);
-  //Vector3D new_p = this->position.add(&vt);
-  
-  //version with operators
+  //Update position 
   Vector3D vt = this->velocity * t;
   Vector3D new_p = this->position + vt;
 
   this->position = new_p;
 
   //Update velocity
-  
-  //version without operators
-  //Vector3D at = this->acceleration.mult_scal(t);
-  //Vector3D new_v = this->velocity.mult_scal(pow(this->dumping, t)).add(&at);
-
-  //version with operators
   Vector3D at = this->acceleration * t;
   Vector3D new_v = this->velocity /* * pow(this->dumping, t)*/ + at;
 
   this->velocity = new_v;
+
+  this->clear_accum();
 }
 
 // Add new force to the resulting force
