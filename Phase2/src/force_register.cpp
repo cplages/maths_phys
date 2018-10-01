@@ -1,21 +1,21 @@
 #include "force_register.hpp"
 
-void ForceRegister::add(Particule *particule, ParticuleForceGenerator *fg) {
+void ForceRegister::add(Particle *particle, ParticleForceGenerator *fg) {
   struct ForceRecording tmp;
-  tmp.particule = particule;
+  tmp.particle = particle;
   tmp.fg = fg;
   forces.push_back(tmp);
 }
 
-void ForceRegister::erase(Particule *particule, ParticuleForceGenerator *fg) {
+void ForceRegister::erase(Particle *particle, ParticleForceGenerator *fg) {
   struct ForceRecording tmp;
-  tmp.particule = particule;
+  tmp.particle = particle;
   tmp.fg = fg;
 
   bool found = false;
   records::iterator it = forces.begin();
   while (it != forces.end() && !found) {
-    if((it->particule == tmp.particule) && (it->fg == tmp.fg)) {
+    if((it->particle == tmp.particle) && (it->fg == tmp.fg)) {
       found = true;
       forces.erase(it);
     }
@@ -29,4 +29,3 @@ int ForceRegister::count() {
 ForceRegister::records ForceRegister::get_force_register(){
   return forces;
 }
-

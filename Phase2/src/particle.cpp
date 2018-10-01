@@ -2,10 +2,10 @@
 #include <float.h>
 #include <math.h>
 
-#include "particule.hpp"
+#include "particle.hpp"
 
 // Basic constructor
-Particule::Particule() {
+Particle::Particle() {
   this->position = Vector3D();
   this->velocity = Vector3D();
   this->acceleration = Vector3D();
@@ -16,7 +16,7 @@ Particule::Particule() {
 }
 
 // Basic constructor with variables
-Particule::Particule(Vector3D p0, Vector3D v0, Vector3D a0, float m0/*, float g0, float d0*/){
+Particle::Particle(Vector3D p0, Vector3D v0, Vector3D a0, float m0/*, float g0, float d0*/){
   this->position = p0;
   this->velocity = v0;
   this->acceleration = a0;
@@ -30,29 +30,29 @@ Particule::Particule(Vector3D p0, Vector3D v0, Vector3D a0, float m0/*, float g0
   }
 
   this->accum_force = Vector3D();
-  
+
   //gravity is a vector on the Y axis.
   // this->gravity = Vector3D(0,-g0,0);
   //this->acceleration = this->gravity;
-  
+
   // this->dumping = d0;
 }
 
 //Getters and setters
-Vector3D Particule::get_position() {
+Vector3D Particle::get_position() {
   return this->position;
 }
 
-Vector3D Particule::get_velocity() {
+Vector3D Particle::get_velocity() {
   return this->velocity;
 }
 
-float Particule::get_inverse_mass(){
+float Particle::get_inverse_mass(){
   return inverse_mass;
 }
 
 
-void Particule::set_mass(float m0){
+void Particle::set_mass(float m0){
   if (m0 == 0){
     printf("Masse nulle impossible\n");
     this->inverse_mass = FLT_MAX;
@@ -62,11 +62,11 @@ void Particule::set_mass(float m0){
   }
 }
 
-// Update the position and velocity of the particule
-void Particule::integrate(float t){
+// Update the position and velocity of the particle
+void Particle::integrate(float t){
   this->acceleration = this->accum_force * this->inverse_mass;
-  
-  //Update position 
+
+  //Update position
   Vector3D vt = this->velocity * t;
   Vector3D new_p = this->position + vt;
 
@@ -82,18 +82,18 @@ void Particule::integrate(float t){
 }
 
 // Add new force to the resulting force
-void Particule::add_force(const Vector3D &force) {
-  accum_force += force; 
+void Particle::add_force(const Vector3D &force) {
+  accum_force += force;
 }
 
 // Reset resulting force
-void Particule::clear_accum() {
+void Particle::clear_accum() {
   accum_force = Vector3D();
 }
 
-// Print some attributes of the particule
-void Particule::display(){
-  printf("Particule : ");
+// Print some attributes of the particle
+void Particle::display(){
+  printf("Particle : ");
   printf("\t position = ");
   this->position.display();
   printf("\t velocity = ");
@@ -102,7 +102,7 @@ void Particule::display(){
 }
 
 // Affect operator
-Particule& Particule::operator =(Particule const& p) {
+Particle& Particle::operator =(Particle const& p) {
   this->position = p.position;
   this->velocity = p.velocity;
   this->acceleration = p.acceleration;
@@ -114,5 +114,5 @@ Particule& Particule::operator =(Particule const& p) {
 
 
 // Destructor
-Particule::~Particule(){
+Particle::~Particle(){
 }

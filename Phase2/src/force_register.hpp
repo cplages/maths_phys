@@ -3,22 +3,22 @@
 
 #include <vector>
 
-#include "particule.hpp"
-#include "particule_force_generator.hpp"
+#include "particle.hpp"
+#include "particle_force_generator.hpp"
 
 class ForceRegister {
 public:
 
   struct ForceRecording {
-    Particule *particule;
-    ParticuleForceGenerator *fg;
+    Particle *particle;
+    ParticleForceGenerator *fg;
   };
   typedef std::vector<struct ForceRecording> records;
   records forces;
-  
-  
-  void add(Particule *particule, ParticuleForceGenerator *fg);
-  void erase(Particule *particule, ParticuleForceGenerator *fg);
+
+
+  void add(Particle *particle, ParticleForceGenerator *fg);
+  void erase(Particle *particle, ParticleForceGenerator *fg);
   int count();
 
   records get_force_register();

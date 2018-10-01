@@ -22,9 +22,9 @@ public:
   Vector3D(float x0, float y0, float z0);
 
   //getters
-  float get_x();
-  float get_y();
-  float get_z();
+  float get_x() const;
+  float get_y() const;
+  float get_z() const;
 
   //usual vector operations
   Vector3D add(Vector3D const *v) const;
@@ -49,6 +49,7 @@ public:
 
 //binary operators outside the class;
 Vector3D operator +(Vector3D const& v, Vector3D const& w);
+Vector3D operator -(Vector3D const& v, Vector3D const& w);
 Vector3D operator *(Vector3D const& v, float const& k);
 
 #endif

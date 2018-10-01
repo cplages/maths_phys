@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "vector3D_test.hpp"
-#include "particule_test.hpp"
+#include "particle_test.hpp"
 
-// Launcher of the Vector3D and Particule test
+// Launcher of the Vector3D and Particle test
 
 int main(){
 
@@ -21,7 +21,7 @@ int main(){
   printf("done !\n");
 
 
-  printf("Particule test ... \n");
+  printf("Particle test ... \n");
   test_gun();
 
   printf("Done !\n");

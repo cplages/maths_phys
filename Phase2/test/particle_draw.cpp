@@ -7,14 +7,14 @@
 
 
 #include "../src/vector3D.hpp"
-#include "../src/particule.hpp"
+#include "../src/particle.hpp"
 
 
 using namespace std;
 
-/* GLUT Particule Launcher animations
+/* GLUT Particle Launcher animations
 
-- 4 differents particules availables
+- 4 differents particles availables
 
 */
 
@@ -32,8 +32,8 @@ int CAMERA_UP_X = 0;
 int CAMERA_UP_Y = 1;
 int CAMERA_UP_Z = 0;
 
-vector<Particule> particule_types;
-vector<Particule> particule_instances;
+vector<Particle> particle_types;
+vector<Particle> particle_instances;
 
 float animation_time = 10.0f;
 float current_time;
@@ -52,30 +52,30 @@ void display(void)
      GL_DEPTH_BUFFER_BIT
      );
 
-  for(vector<Particule>::iterator it = particule_instances.begin(); it != particule_instances.end(); ++it)
+  for(vector<Particle>::iterator it = particle_instances.begin(); it != particle_instances.end(); ++it)
     {
       Vector3D p = it->get_position();
 
       glTranslated(p.get_x() - old_p.get_x(), p.get_y() - old_p.get_y(), p.get_z() - old_p.get_z());
       glutSolidSphere(1,30,30);
-  
+
       old_p = p;
     }
   glutSwapBuffers();
   glutPostRedisplay();
 }
 
-// Integration of the particule during the animation
+// Integration of the particle during the animation
 void idle_func(void) {
   clock_t start_time = clock();
   if(current_time < animation_time && launch) {
     //give to integrate the time between two frame
-    for(vector<Particule>::iterator it = particule_instances.begin(); it != particule_instances.end(); ++it)
+    for(vector<Particle>::iterator it = particle_instances.begin(); it != particle_instances.end(); ++it)
       {
 	it->integrate(interval);
       }
-    
-    current_time += interval;    
+
+    current_time += interval;
     float remaining_time = interval - (clock() - start_time) / CLOCKS_PER_SEC;
     if(remaining_time > 0) {
       //multiply by 1000 due to sleep function taking millisecond in argument.
@@ -107,20 +107,20 @@ void reshape(int width, int height)
   glMatrixMode(GL_MODELVIEW);
 }
 
-// Initialisation of the 4 types of particules
-void init_particules_types() {
+// Initialisation of the 4 types of particles
+void init_particles_types() {
   int size = 4;
-  Particule gun_bullet = Particule(Vector3D(), Vector3D(35,0,0), 2, 1, 0.7);
-  Particule fire_ball = Particule(Vector3D(), Vector3D(50,0,0), 2, -1, 0.7);
-  Particule laser = Particule(Vector3D(), Vector3D(100,0,0), 2, 0, 0.7);
-  Particule canon = Particule(Vector3D(), Vector3D(70,0,0), 2, 6, 0.7);
+  Particle gun_bullet = Particle(Vector3D(), Vector3D(35,0,0), 2, 1, 0.7);
+  Particle fire_ball = Particle(Vector3D(), Vector3D(50,0,0), 2, -1, 0.7);
+  Particle laser = Particle(Vector3D(), Vector3D(100,0,0), 2, 0, 0.7);
+  Particle canon = Particle(Vector3D(), Vector3D(70,0,0), 2, 6, 0.7);
 
-  particule_types.push_back(gun_bullet);
-  particule_types.push_back(fire_ball);
-  particule_types.push_back(laser);
-  particule_types.push_back(canon);
+  particle_types.push_back(gun_bullet);
+  particle_types.push_back(fire_ball);
+  particle_types.push_back(laser);
+  particle_types.push_back(canon);
 
-  particule_instances.push_back(particule_types[0]);
+  particle_instances.push_back(particle_types[0]);
 
 }
 
@@ -129,23 +129,23 @@ void handler_event(unsigned char key, int x, int y) {
   if(launch == false) {
     switch(key) {
     case '1':
-      particule_instances[0] = particule_types[0];
+      particle_instances[0] = particle_types[0];
       glColor3f(1.0,1.0,1.0);
       break;
     case '2':
-      particule_instances[0] = particule_types[1];
+      particle_instances[0] = particle_types[1];
       glColor3f(1.0,0.0,0.0);
       break;
     case '3':
-      particule_instances[0] = particule_types[2];
+      particle_instances[0] = particle_types[2];
       glColor3f(0.0,1.0,0.0);
       break;
     case '4':
-      particule_instances[0] = particule_types[3];
+      particle_instances[0] = particle_types[3];
       glColor3f(0.0,0.0,1.0);
       break;
     case 'l':
-      printf("Particule launched ! \n");
+      printf("particle launched ! \n");
       launch = true;
       glPushMatrix();
       break;
@@ -158,25 +158,25 @@ void handler_event(unsigned char key, int x, int y) {
 
 // Print basic instructions for the player
 void display_init(){
-  printf("Welcome to the Particule Launcher !\n");
-  printf("You have 4 particules availables : gun bullet, fire ball, laser and canon. Push 1 to 4 respectively to choose one.\n");
-  printf("Then push `l` to launch the particule.\n");
-  printf("When the animation is over, you can start again by choosing a particule and launching it.\n");
+  printf("Welcome to the particle Launcher !\n");
+  printf("You have 4 particles availables : gun bullet, fire ball, laser and canon. Push 1 to 4 respectively to choose one.\n");
+  printf("Then push `l` to launch the particle.\n");
+  printf("When the animation is over, you can start again by choosing a particle and launching it.\n");
 }
 
 int main(int argc, char** argv)
-{  
+{
   current_time = 0.0f;
   old_p = Vector3D();
 
-  init_particules_types();
+  init_particles_types();
 
   display_init();
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE);
   glutInitWindowSize(WINDOW_SIZE, WINDOW_SIZE);
   glutInitWindowPosition(WINDOW_POSITION_X, WINDOW_POSITION_Y);
-  glutCreateWindow("particule launcher");
+  glutCreateWindow("particle launcher");
   glutKeyboardFunc(handler_event);
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);

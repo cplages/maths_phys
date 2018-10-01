@@ -1,17 +1,17 @@
-#ifndef _PARTICULE_
-#define _PARTICULE_
+#ifndef _PARTICLE_
+#define _PARTICLE_
 
 #include "vector3D.hpp"
 
-/* Class representing a particule
+/* Class representing a particle
 
 Attributes : position, velocity, acceleration, inverse_mass, gravity and dumping
 
-Particular methods : integrate (update position and velocity of the particule at each frame)
+Particular methods : integrate (update position and velocity of the particle at each frame)
 
 */
 
-class Particule {
+class Particle {
 
 private:
   Vector3D position;
@@ -24,30 +24,30 @@ private:
   // float dumping;
 
 public:
-  Particule();
-  Particule(Vector3D p0, Vector3D v0, Vector3D a0, float m0/*float g0, float d0*/);
+  Particle();
+  Particle(Vector3D p0, Vector3D v0, Vector3D a0, float m0/*float g0, float d0*/);
 
   Vector3D get_position();
-  
+
   Vector3D get_velocity();
-  
+
 
   float get_inverse_mass();
   void set_mass(float m0);
-  
+
   void integrate(float t);
-  
+
   void add_force(const Vector3D &force);
   void clear_accum();
-  
+
   void display();
 
-  
-  ~Particule();
 
-  Particule& operator =(Particule const& p);
+  ~Particle();
 
-  
+  Particle& operator =(Particle const& p);
+
+
 };
 
 #endif

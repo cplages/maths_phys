@@ -1,9 +1,9 @@
 cc= g++
 CFLAGS= -Wall
-SRC=vector3D_test.cpp particule_test.cpp launcher.cpp
-OBJ=vector3D_test.o particule_test.o launcher.o
+SRC=vector3D_test.cpp particle_test.cpp launcher.cpp
+OBJ=vector3D_test.o particle_test.o launcher.o
 
-NDEP=vector3D.o particule.o
+NDEP=vector3D.o particle.o
 LDEP=../src
 DEP = $(patsubst %,$(LDEP)/%,$(NDEP))
 
@@ -20,7 +20,7 @@ run: link
 	./test
 
 draw: $(DEP)
-	g++ -o draw $^ particule_draw.cpp -lGLU -lGL -lglut
+	g++ -o draw $^ particle_draw.cpp -lGLU -lGL -lglut
 
 
 %.o: %.c

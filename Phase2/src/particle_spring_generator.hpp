@@ -1,18 +1,18 @@
-#ifndef _PARTICULE_SPRING_GENERATOR_
-#define _PARTICULE_SPRING_GENERATOR_
+#ifndef _PARTICLE_SPRING_GENERATOR_
+#define _PARTICLE_SPRING_GENERATOR_
 
-#include "particule_force_generator.hpp"
+#include "particle_force_generator.hpp"
 
-class ParticuleSpringGenerator : public ParticuleForceGenerator {
+class ParticleSpringGenerator : public ParticleForceGenerator {
 
-private :
-  Particule other_particle;
+protected :
+  Particle other_particle;
   float k;
   float l0;
 
 public :
-  ParticuleSpringGenerator(Particule other_particle, float k, float l0);
-  virtual void update_force(Particule * particule, float period); 
+  ParticleSpringGenerator(Particle other_particle, float k, float l0);
+  virtual void update_force(Particle * particle, float period);
 };
 
 

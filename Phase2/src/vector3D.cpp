@@ -19,15 +19,15 @@ Vector3D::Vector3D(float x0, float y0, float z0) {
 }
 
 // Getters
-float Vector3D::get_x() {
+float Vector3D::get_x() const{
   return this->x;
 }
 
-float Vector3D::get_y() {
+float Vector3D::get_y() const{
   return this->y;
 }
 
-float Vector3D::get_z() {
+float Vector3D::get_z() const{
   return this->z;
 }
 
@@ -138,6 +138,14 @@ Vector3D& Vector3D::operator +=(const Vector3D& v){
 Vector3D operator +(Vector3D const& v, Vector3D const& w) {
   Vector3D result = v.add(&w);
   return result;
+}
+
+// Soustraction operator
+Vector3D operator -(Vector3D const& v, Vector3D const& w) {
+  float new_x = v.get_x() + w.get_x();
+  float new_y = v.get_y() + w.get_y();
+  float new_z = v.get_z() + w.get_z();
+  return Vector3D(new_x, new_y, new_z);
 }
 
 // Scalar multiplication operator
