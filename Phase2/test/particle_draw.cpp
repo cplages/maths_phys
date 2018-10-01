@@ -5,10 +5,13 @@
 #include <math.h>
 #include <vector>
 
-
 #include "../src/vector3D.hpp"
-#include "../src/particle.hpp"
 
+#include "../src/particle.hpp"
+#include "../src/particle_force_generator.hpp"
+#include "../src/particle_gravity_generator.hpp"
+
+#include "../src/force_register.hpp"
 
 using namespace std;
 
@@ -32,6 +35,10 @@ int CAMERA_UP_X = 0;
 int CAMERA_UP_Y = 1;
 int CAMERA_UP_Z = 0;
 
+ForceRegister *  particles_and_forces;
+
+vector<ParticleForceGenerator *> force_generator_instances;
+
 vector<Particle> particle_types;
 vector<Particle> particle_instances;
 
@@ -43,32 +50,46 @@ Vector3D old_p;
 
 bool launch = false;
 
-// Display function called every frame
-void display(void)
+/* Physics Region */
+void init_particles_types() {
+  int size = 4;
+  Particle gun_bullet = Particle(Vector3D(), Vector3D(35,0,0), Vector3D(0, 0, 0) , 2);
+  Particle fire_ball = Particle(Vector3D(), Vector3D(50,0,0), Vector3D(0, 0, 0) , 2);
+  Particle laser = Particle(Vector3D(), Vector3D(100,0,0), Vector3D(0, 0, 0), 2);
+  Particle canon = Particle(Vector3D(), Vector3D(70,0,0), Vector3D(0, 0, 0), 2);
+
+  ParticleGravityGenerator *gravity = new ParticleGravityGenerator(Vector3D(0, -10, 0));
+
+  force_generator_instances.push_back(gravity);
+
+  particle_types.push_back(gun_bullet);
+  particle_types.push_back(fire_ball);
+  particle_types.push_back(laser);
+  particle_types.push_back(canon);
+  
+  particle_instances.push_back(particle_types[0]);
+
+  particles_and_forces->add(&(particle_instances[0]), force_generator_instances[0]);
+}
+
+
+void call_all_force_generator()
 {
-  glClear
-    (
-     GL_COLOR_BUFFER_BIT |
-     GL_DEPTH_BUFFER_BIT
-     );
+  ForceRegister::records forces = particles_and_forces->get_force_register();
 
-  for(vector<Particle>::iterator it = particle_instances.begin(); it != particle_instances.end(); ++it)
+  for(ForceRegister::records::iterator it = forces.begin(); it != forces.end(); ++it)
     {
-      Vector3D p = it->get_position();
-
-      glTranslated(p.get_x() - old_p.get_x(), p.get_y() - old_p.get_y(), p.get_z() - old_p.get_z());
-      glutSolidSphere(1,30,30);
-
-      old_p = p;
+      ParticleForceGenerator* current_force = it->fg;
+      Particle * current_particle = it->particle;
+      current_force->update_force(current_particle, interval);
     }
-  glutSwapBuffers();
-  glutPostRedisplay();
 }
 
 // Integration of the particle during the animation
 void idle_func(void) {
   clock_t start_time = clock();
   if(current_time < animation_time && launch) {
+    call_all_force_generator();
     //give to integrate the time between two frame
     for(vector<Particle>::iterator it = particle_instances.begin(); it != particle_instances.end(); ++it)
       {
@@ -92,6 +113,30 @@ void idle_func(void) {
   glutPostRedisplay();
 }
 
+
+/* Display Region */
+// Display function called every frame
+void display(void)
+{
+  glClear
+    (
+     GL_COLOR_BUFFER_BIT |
+     GL_DEPTH_BUFFER_BIT
+     );
+
+  for(vector<Particle>::iterator it = particle_instances.begin(); it != particle_instances.end(); ++it)
+    {
+      Vector3D p = it->get_position();
+
+      glTranslated(p.get_x() - old_p.get_x(), p.get_y() - old_p.get_y(), p.get_z() - old_p.get_z());
+      glutSolidSphere(1,30,30);
+
+      old_p = p;
+    }
+  glutSwapBuffers();
+  glutPostRedisplay();
+}
+
 // Reshape the window size if necessary
 void reshape(int width, int height)
 {
@@ -108,22 +153,9 @@ void reshape(int width, int height)
 }
 
 // Initialisation of the 4 types of particles
-void init_particles_types() {
-  int size = 4;
-  Particle gun_bullet = Particle(Vector3D(), Vector3D(35,0,0), 2, 1, 0.7);
-  Particle fire_ball = Particle(Vector3D(), Vector3D(50,0,0), 2, -1, 0.7);
-  Particle laser = Particle(Vector3D(), Vector3D(100,0,0), 2, 0, 0.7);
-  Particle canon = Particle(Vector3D(), Vector3D(70,0,0), 2, 6, 0.7);
 
-  particle_types.push_back(gun_bullet);
-  particle_types.push_back(fire_ball);
-  particle_types.push_back(laser);
-  particle_types.push_back(canon);
 
-  particle_instances.push_back(particle_types[0]);
-
-}
-
+/* Event Region*/
 // Catch the input of the player
 void handler_event(unsigned char key, int x, int y) {
   if(launch == false) {
@@ -168,6 +200,8 @@ int main(int argc, char** argv)
 {
   current_time = 0.0f;
   old_p = Vector3D();
+
+  particles_and_forces = new ForceRegister();
 
   init_particles_types();
 

@@ -3,9 +3,8 @@ CFLAGS= -Wall
 SRC=vector3D_test.cpp particle_test.cpp launcher.cpp
 OBJ=vector3D_test.o particle_test.o launcher.o
 
-NDEP=vector3D.o particle.o
 LDEP=../src
-DEP = $(patsubst %,$(LDEP)/%,$(NDEP))
+DEP=$(wildcard $(LDEP)/*.o)
 
 all:compile link run
 
@@ -26,7 +25,7 @@ draw: $(DEP)
 %.o: %.c
 	$(cc) -c -o $@ $< $(CFlAGS)
 
-$(LDEP)/%.o: $(LDEP)/%.c
+$(DEP): $(patsubst %.o, %.cpp, $(DEP))
 	$(cc) -c -o $@ $< $(CFlAGS)
 
 clean:
