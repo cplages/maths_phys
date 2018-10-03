@@ -10,17 +10,18 @@ private:
   Particle* particles[2];
   float coeff_restitution;
   Vector3D normal_vector;
+  float penetration;
 
   void resolve_velocity();
   void resolve_interpenetration();
-  
+
 public:
   ParticleContact(Particle* particle_a, Particle* particle_b, float coeff_restitution);
-  
+
   void resolve(float period);
 
   float compute_vs();
-  
+
 };
 
 

@@ -28,6 +28,7 @@ public:
   Particle(Vector3D p0, Vector3D v0, Vector3D a0, float m0/*float g0, float d0*/);
 
   Vector3D get_position();
+  void set_position(Vector3D p0);
 
   Vector3D get_velocity();
   void set_velocity(Vector3D v0);

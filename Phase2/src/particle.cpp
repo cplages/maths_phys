@@ -43,6 +43,10 @@ Vector3D Particle::get_position() {
   return this->position;
 }
 
+void Particle::set_position(Vector3D p0) {
+  this->position = p0;
+}
+
 Vector3D Particle::get_velocity() {
   return this->velocity;
 }
