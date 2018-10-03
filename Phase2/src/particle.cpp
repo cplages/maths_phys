@@ -47,6 +47,10 @@ Vector3D Particle::get_velocity() {
   return this->velocity;
 }
 
+void Particle::set_velocity(Vector3D v0) {
+  this->velocity = v0;
+}
+
 float Particle::get_inverse_mass(){
   return inverse_mass;
 }

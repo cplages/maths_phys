@@ -12,19 +12,21 @@ ParticleBuoyancyGenerator::ParticleBuoyancyGenerator(float max_deepness, float o
 
 void ParticleBuoyancyGenerator::update_force(Particle * particle, float period){
 
-  float subversion; //  ?
+  float s = 1; //a particle doesn't have a size, it is just a arbitrary value to make it works!
+  float subversion = (particle->get_position().get_y() - this->water_height - s) / (2 * s);
+  float value;
   Vector3D force;
 
-  if (subversion <= 0){
-    force = Vector3D();
+  if (subversion >= 0){
+    value = 0;
   }
-  else if (subversion >= 1){
-    // vol * d
-
+  else if (subversion <= -1){
+    value = this->object_volume * this->density; 
   }
   else {
-    // subversion * vol * d
+    value = this->object_volume * this->density * subversion;
   }
-
+  
+  force = Vector3D(0, value, 0);
   particle->add_force(force);
 }
