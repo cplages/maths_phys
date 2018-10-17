@@ -34,7 +34,8 @@ void ParticleContact::resolve_interpenetration()
 
 void ParticleContact::resolve(float period)
 {
-
+  resolve_velocity();
+  resolve_interpenetration();
 }
 
 float ParticleContact::compute_vs()

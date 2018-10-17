@@ -14,12 +14,14 @@ private:
 
   void resolve_velocity();
   void resolve_interpenetration();
-
-public:
-  ParticleContact(Particle* particle_a, Particle* particle_b, float coeff_restitution);
-
   void resolve(float period);
 
+  friend class ParticleContactResolver;
+  
+public:
+  
+  ParticleContact(Particle* particle_a, Particle* particle_b, float coeff_restitution);
+  
   float compute_vs();
 
 };
