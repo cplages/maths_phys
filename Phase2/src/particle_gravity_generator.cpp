@@ -1,4 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "particle_gravity_generator.hpp"
+
 
 ParticleGravityGenerator::ParticleGravityGenerator(Vector3D g0){
   this->gravity = g0;

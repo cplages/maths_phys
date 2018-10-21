@@ -7,7 +7,7 @@ all: compile
 
 compile: $(OBJ)
 
-%.o: %.c
+%.o: %.cpp
 	$(cc) -c -o $@ $< $(CFlAGS)
 
 clean:

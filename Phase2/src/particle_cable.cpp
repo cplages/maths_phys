@@ -1,4 +1,7 @@
+#include <cstddef>
+
 #include "particle_cable.hpp"
+
 
 ParticleCable::ParticleCable(Particle* particles[], float max_length, float coeff_restitution): max_length(max_length), coeff_restitution(coeff_restitution)
 {
@@ -8,5 +11,9 @@ ParticleCable::ParticleCable(Particle* particles[], float max_length, float coef
 
 ParticleContact* ParticleCable::add_contact()
 {
-  return new ParticleContact(particles[0], particles[1], coeff_restitution);
+  if(get_length() >= max_length)
+  {
+    return new ParticleContact(particles[0], particles[1], coeff_restitution);
+  }
+  return NULL;
 }
