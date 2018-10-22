@@ -17,11 +17,11 @@ private:
   void resolve(float period);
 
   friend class ParticleContactResolver;
-  
+
 public:
-  
-  ParticleContact(Particle* particle_a, Particle* particle_b, float coeff_restitution);
-  
+
+  ParticleContact(Particle* particle_a, Particle* particle_b, float coeff_restitution, float penetration);
+
   float compute_vs();
 
 };

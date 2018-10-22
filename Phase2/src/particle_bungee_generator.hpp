@@ -7,7 +7,7 @@
 class ParticleBungeeGenerator : public ParticleSpringGenerator {
 
 public :
-  ParticleBungeeGenerator(Particle other_particle, float k, float l0);
+  ParticleBungeeGenerator(Particle * other_particle, float k, float l0);
   void update_force(Particle * particle, float period);
 };
 

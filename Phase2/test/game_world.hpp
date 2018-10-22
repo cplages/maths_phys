@@ -15,6 +15,8 @@ private:
 
   ForceRegister * particles_and_forces;
 
+  Particle * floor_particle;
+
   Particle * main_particle;
   ParticleGravityGenerator * gravity_generator;
 
@@ -25,7 +27,7 @@ private:
 
 
 public:
-  GameWorld(int n);
+  GameWorld(int n, float radius_particle);
 
   std::vector<Particle*> get_active_particles();
   void execute(float * current_time);

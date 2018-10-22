@@ -6,12 +6,12 @@
 class ParticleSpringGenerator : public ParticleForceGenerator {
 
 protected :
-  Particle other_particle;
+  Particle * other_particle;
   float k;
   float l0;
 
 public :
-  ParticleSpringGenerator(Particle other_particle, float k, float l0);
+  ParticleSpringGenerator(Particle * other_particle, float k, float l0);
   virtual void update_force(Particle * particle, float period);
 };
 

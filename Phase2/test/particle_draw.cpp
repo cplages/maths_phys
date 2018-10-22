@@ -1,10 +1,12 @@
 #include <time.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <GL/glut.h>
 #include <math.h>
 #include <vector>
 
+#include "../src/constant.hpp"
 #include "../src/vector3D.hpp"
 #include "../src/particle.hpp"
 #include "../src/particle_force_generator.hpp"
@@ -34,14 +36,17 @@ int CAMERA_UP_Z = 0;
 
 
 float current_time;
+float radius;
 std::vector<Particle*> active_particles;
 GameWorld *game;
+float RGB[MAX_PARTICLES][3];
 
 std::vector<Vector3D> old_p;
 
 
 void update_physic(){
   game->execute(&current_time);
+  glutPostRedisplay();
 }
 
 // Display function called every frame
@@ -56,9 +61,20 @@ void display(void)
   int i = 0;
   for(vector<Particle *>::iterator it = active_particles.begin(); it != active_particles.end(); ++it)
     {
+
       Vector3D p = (*it)->get_position();
-      glTranslated(p.get_x() - old_p[i].get_x(), p.get_y() - old_p[i].get_y(), p.get_z() - old_p[i].get_z());
-      glutSolidSphere(1,30,30);
+      glPushMatrix();
+      glColor3f(RGB[i][0],RGB[i][1],RGB[i][2]);
+      //glTranslated(p.get_x() - old_p[i].get_x(), p.get_y() - old_p[i].get_y(), p.get_z() - old_p[i].get_z());
+      //glutSolidSphere(radius,30,30);
+      glBegin(GL_POLYGON);
+      int point_number = 6;
+      for(double j = 0; j < 2 * 3.14; j+= 3.14/point_number)
+      {
+        glVertex3f((cos(j) * radius) + p.get_x(), (sin(j) * radius) + p.get_y(), 0.0);
+      }
+      glEnd();
+      glPopMatrix();
 
       old_p[i] = p;
       i++;
@@ -66,6 +82,7 @@ void display(void)
   glutSwapBuffers();
   glutPostRedisplay();
 }
+
 
 // Reshape the window size if necessary
 void reshape(int width, int height)
@@ -87,34 +104,29 @@ void reshape(int width, int height)
 /* Event Region*/
 // Catch the input of the player
 void handler_event(unsigned char key, int x, int y) {
-  /*if(launch == false) {
-    switch(key) {
-    case '1':
-      particle_instances[0] = particle_types[0];
-      glColor3f(1.0,1.0,1.0);
+  Particle * main_particle = active_particles.back();
+  Vector3D new_position = main_particle->get_position();
+  switch(key) {
+    case 'z':
+      new_position += Vector3D(0,radius,0);
+      main_particle->set_position(new_position);
       break;
-    case '2':
-      particle_instances[0] = particle_types[1];
-      glColor3f(1.0,0.0,0.0);
+    case 'q':
+      new_position += Vector3D(-radius,0,0);
+      main_particle->set_position(new_position);
       break;
-    case '3':
-      particle_instances[0] = particle_types[2];
-      glColor3f(0.0,1.0,0.0);
+    case 's':
+      new_position += Vector3D(0,-radius,0);
+      main_particle->set_position(new_position);
       break;
-    case '4':
-      particle_instances[0] = particle_types[3];
-      glColor3f(0.0,0.0,1.0);
-      break;
-    case 'l':
-      printf("particle launched ! \n");
-      launch = true;
-      glPushMatrix();
+    case 'd':
+      new_position += Vector3D(radius,0,0);
+      main_particle->set_position(new_position);
       break;
     default:
       break;
-    }
   }
-  glutPostRedisplay();*/
+  glutPostRedisplay();
 }
 
 // Print basic instructions for the player
@@ -125,14 +137,27 @@ void display_init(){
 int main(int argc, char** argv)
 {
   current_time = 0;
-
-  int n = 2;
+  radius = 1.;
+  // Total number of particles
+  int n = 10;
   for (int i=0; i<n;  i++){
     old_p.push_back(Vector3D());
   }
 
-  game = new GameWorld(n);
+  game = new GameWorld(n, radius);
   active_particles = game->get_active_particles();
+
+  // Color particles init
+  srand(time(NULL));
+  for (int k = 0; k<n-1; k++){
+    RGB[k][0] = ((float) rand()) / ((float) RAND_MAX); //to have a random float betwen [0,1]
+    RGB[k][1] = ((float) rand()) / ((float) RAND_MAX);
+    RGB[k][2] = ((float) rand()) / ((float) RAND_MAX);
+  }
+  // main particle in white
+  RGB[n-1][0] = 1;
+  RGB[n-1][1] = 1;
+  RGB[n-1][2] = 1;
 
   display_init();
 

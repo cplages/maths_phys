@@ -4,14 +4,14 @@
 
 
 
-ParticleBungeeGenerator::ParticleBungeeGenerator(Particle other_particle, float k, float l0):
+ParticleBungeeGenerator::ParticleBungeeGenerator(Particle * other_particle, float k, float l0):
 ParticleSpringGenerator(other_particle, k, l0){}
 
 
 
 void ParticleBungeeGenerator::update_force(Particle * particle, float period){
 
-  Vector3D dist = other_particle.get_position() - particle->get_position();
+  Vector3D dist = other_particle->get_position() - particle->get_position();
   float l = dist.norm();
 
   Vector3D force;

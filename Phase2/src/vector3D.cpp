@@ -95,7 +95,7 @@ float Vector3D::triple_product(Vector3D *v,Vector3D *w) const {
 
 // Print the attributes of the vector
 void Vector3D::display(){
-  printf("(%f, %f, %f) ", this->x, this->y, this->z);
+  printf("(%f, %f, %f) \n", this->x, this->y, this->z);
 }
 
 // Destructor
@@ -142,9 +142,9 @@ Vector3D operator +(Vector3D const& v, Vector3D const& w) {
 
 // Soustraction operator
 Vector3D operator -(Vector3D const& v, Vector3D const& w) {
-  float new_x = v.get_x() + w.get_x();
-  float new_y = v.get_y() + w.get_y();
-  float new_z = v.get_z() + w.get_z();
+  float new_x = v.get_x() - w.get_x();
+  float new_y = v.get_y() - w.get_y();
+  float new_z = v.get_z() - w.get_z();
   return Vector3D(new_x, new_y, new_z);
 }
 

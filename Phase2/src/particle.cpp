@@ -11,12 +11,11 @@ Particle::Particle() {
   this->acceleration = Vector3D();
   this->inverse_mass = 0;
   this->accum_force = Vector3D();
-  // this->gravity = Vector3D();
-  // this->dumping = 0;
+  this->radius = 0;
 }
 
 // Basic constructor with variables
-Particle::Particle(Vector3D p0, Vector3D v0, Vector3D a0, float m0/*, float g0, float d0*/){
+Particle::Particle(Vector3D p0, Vector3D v0, Vector3D a0, float m0, float r){
   this->position = p0;
   this->velocity = v0;
   this->acceleration = a0;
@@ -31,11 +30,7 @@ Particle::Particle(Vector3D p0, Vector3D v0, Vector3D a0, float m0/*, float g0, 
 
   this->accum_force = Vector3D();
 
-  //gravity is a vector on the Y axis.
-  // this->gravity = Vector3D(0,-g0,0);
-  //this->acceleration = this->gravity;
-
-  // this->dumping = d0;
+  this->radius = r;
 }
 
 //Getters and setters
@@ -59,6 +54,9 @@ float Particle::get_inverse_mass(){
   return inverse_mass;
 }
 
+float Particle::get_radius(){
+  return radius;
+}
 
 void Particle::set_mass(float m0){
   if (m0 == 0){
@@ -77,7 +75,6 @@ void Particle::integrate(float t){
   //Update position
   Vector3D vt = this->velocity * t;
   Vector3D new_p = this->position + vt;
-
   this->position = new_p;
 
   //Update velocity
@@ -107,6 +104,12 @@ void Particle::display(){
   printf("\t velocity = ");
   this->velocity.display();
   printf("\n");
+}
+
+// Penetration correspond to the difference between the two radius and the particle center distances
+float Particle::get_interpenetration_with(Particle * p){
+  Vector3D other_center = p->position;
+  return (this->radius + p->radius) - (this->position.distance(&other_center));
 }
 
 // Affect operator

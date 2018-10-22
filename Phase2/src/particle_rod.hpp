@@ -8,12 +8,12 @@
 class ParticleRod : public ParticleLink {
 private:
   float max_length;
-  
+
 public:
   ParticleRod(Particle * particles[2], float max_length);
 
   ParticleContact* add_contact();
-  
+
 };
 
 #endif

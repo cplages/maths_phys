@@ -13,7 +13,7 @@ ParticleContact* ParticleCable::add_contact()
 {
   if(get_length() >= max_length)
   {
-    return new ParticleContact(particles[0], particles[1], coeff_restitution);
+    return new ParticleContact(particles[0], particles[1], coeff_restitution, particles[0]->get_interpenetration_with(particles[1]));
   }
   return NULL;
 }

@@ -1,11 +1,13 @@
+#include <cstdio>
+
 #include "particle_contact.hpp"
 
-ParticleContact::ParticleContact(Particle* particle_a, Particle* particle_b, float coeff_restitution): coeff_restitution(coeff_restitution)
+ParticleContact::ParticleContact(Particle* particle_a, Particle* particle_b, float coeff_restitution, float penetration): coeff_restitution(coeff_restitution), penetration(penetration)
 {
   particles[0] = particle_a;
   particles[1] = particle_b;
   Vector3D distance_vector = (particles[0]->get_position() - particles[1]->get_position());
-  normal_vector = distance_vector * (1 / distance_vector.norm()) ;
+  normal_vector = distance_vector * (1 / distance_vector.norm());
 }
 
 void ParticleContact::resolve_velocity()
@@ -13,8 +15,13 @@ void ParticleContact::resolve_velocity()
   float vs_old = compute_vs();
   float vs = (-coeff_restitution * vs_old);
 
-  particles[0]->set_velocity(normal_vector * vs);
-  particles[1]->set_velocity(normal_vector * vs * -1);
+  Vector3D old_v0 = particles[0]->get_velocity();
+  Vector3D old_v1 = particles[1]->get_velocity();
+  Vector3D vs0 = normal_vector * vs;
+  Vector3D vs1 = normal_vector * vs * -1;
+
+  particles[0]->set_velocity(old_v0 + (vs0 * particles[0]->get_inverse_mass()));
+  particles[1]->set_velocity(old_v1 + (vs1 * particles[1]->get_inverse_mass()));
 }
 
 void ParticleContact::resolve_interpenetration()
@@ -35,7 +42,9 @@ void ParticleContact::resolve_interpenetration()
 void ParticleContact::resolve(float period)
 {
   resolve_velocity();
-  resolve_interpenetration();
+  if (penetration > 0){
+    resolve_interpenetration();
+  }
 }
 
 float ParticleContact::compute_vs()
