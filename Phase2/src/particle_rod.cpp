@@ -8,5 +8,5 @@ ParticleRod::ParticleRod(Particle* particles[], float max_length): max_length(ma
 
 ParticleContact* ParticleRod::add_contact()
 {
-    return new ParticleContact(particles[0], particles[1], 0, 0);
+  return new ParticleContact(particles[0], particles[1], 0, 0, false);
 }

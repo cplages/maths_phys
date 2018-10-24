@@ -15,35 +15,20 @@
 
 #include "game_world.hpp"
 
-
 using namespace std;
 
-/* Graphic part of the game */
-
-int WINDOW_SIZE = 1600;
-int WINDOW_POSITION_X = 100;
-int WINDOW_POSITION_Y = 100;
-
-int CAMERA_EYE_X = 0;
-int CAMERA_EYE_Y = 0;
-int CAMERA_EYE_Z = 100;
-int CAMERA_VIEW_X = 0;
-int CAMERA_VIEW_Y = 0;
-int CAMERA_VIEW_Z = 0;
-int CAMERA_UP_X = 0;
-int CAMERA_UP_Y = 1;
-int CAMERA_UP_Z = 0;
-
-
-float current_time;
-float radius;
-std::vector<Particle*> active_particles;
+// physic handler
 GameWorld *game;
+
+//particle color
 float RGB[MAX_PARTICLES][3];
 
-std::vector<Vector3D> old_p;
+float current_time;
 
+//list of particles.
+std::vector<Particle*> active_particles;
 
+// apply physic to the game
 void update_physic(){
   game->execute(&current_time);
   glutPostRedisplay();
@@ -58,25 +43,39 @@ void display(void)
      GL_DEPTH_BUFFER_BIT
      );
 
+  glColor3f(1., 1., 1.);
+  //floor display
+  glBegin(GL_POLYGON);
+
+  glVertex3f(FLOOR_WIDTH_MIN, FLOOR_HEIGHT - 2, 0.0);
+  glVertex3f(FLOOR_WIDTH_MIN, FLOOR_HEIGHT, 0.0);
+  glVertex3f(FLOOR_WIDTH_MAX, FLOOR_HEIGHT, 0.0);
+  glVertex3f(FLOOR_WIDTH_MAX, FLOOR_HEIGHT - 2, 0.0);
+
+  glEnd();
+  
   int i = 0;
+  //draw particles
   for(vector<Particle *>::iterator it = active_particles.begin(); it != active_particles.end(); ++it)
     {
-
       Vector3D p = (*it)->get_position();
+      
       glPushMatrix();
+      
       glColor3f(RGB[i][0],RGB[i][1],RGB[i][2]);
-      //glTranslated(p.get_x() - old_p[i].get_x(), p.get_y() - old_p[i].get_y(), p.get_z() - old_p[i].get_z());
-      //glutSolidSphere(radius,30,30);
-      glBegin(GL_POLYGON);
-      int point_number = 6;
-      for(double j = 0; j < 2 * 3.14; j+= 3.14/point_number)
-      {
-        glVertex3f((cos(j) * radius) + p.get_x(), (sin(j) * radius) + p.get_y(), 0.0);
-      }
-      glEnd();
-      glPopMatrix();
 
-      old_p[i] = p;
+      //draw circles
+      glBegin(GL_POLYGON);
+
+      for(double j = 0; j < 2 * M_PI; j+= M_PI/(PARTICLE_POINT_NUMBER / 2))
+      {
+        glVertex3f((cos(j) * PARTICLE_RADIUS) + p.get_x(), (sin(j) * PARTICLE_RADIUS) + p.get_y(), 0.0);
+      }
+      
+      glEnd();
+      
+      glPopMatrix();
+      
       i++;
     }
   glutSwapBuffers();
@@ -102,49 +101,56 @@ void reshape(int width, int height)
 
 
 /* Event Region*/
-// Catch the input of the player
+// Catch the input of the player, move the player
 void handler_event(unsigned char key, int x, int y) {
   Particle * main_particle = active_particles.back();
-  Vector3D new_position = main_particle->get_position();
+  
+  Vector3D new_velocity = main_particle->get_velocity();
+  
   switch(key) {
     case 'z':
-      new_position += Vector3D(0,radius,0);
-      main_particle->set_position(new_position);
+      new_velocity += Vector3D(0, PARTICLE_RADIUS, 0);
+      main_particle->set_velocity(new_velocity);
       break;
+      
     case 'q':
-      new_position += Vector3D(-radius,0,0);
-      main_particle->set_position(new_position);
+      new_velocity += Vector3D(-PARTICLE_RADIUS, 0, 0);
+      main_particle->set_velocity(new_velocity);
       break;
+      
     case 's':
-      new_position += Vector3D(0,-radius,0);
-      main_particle->set_position(new_position);
+      new_velocity += Vector3D(0, -PARTICLE_RADIUS, 0);
+      main_particle->set_velocity(new_velocity);
       break;
+      
     case 'd':
-      new_position += Vector3D(radius,0,0);
-      main_particle->set_position(new_position);
+      new_velocity += Vector3D(PARTICLE_RADIUS, 0, 0);
+      main_particle->set_velocity(new_velocity);
       break;
+      
     default:
       break;
   }
+  
   glutPostRedisplay();
 }
 
 // Print basic instructions for the player
 void display_init(){
-  printf("BLABLA\n");
+  printf("Blob group application \n");
+  printf("tape, z, s, q, d, to move the white blob, the rest will follow! \n");
 }
 
+//init opengl functions and game parameters.
 int main(int argc, char** argv)
 {
   current_time = 0;
-  radius = 1.;
+  
   // Total number of particles
   int n = 10;
-  for (int i=0; i<n;  i++){
-    old_p.push_back(Vector3D());
-  }
 
-  game = new GameWorld(n, radius);
+  //initiate game physics.
+  game = new GameWorld(n, PARTICLE_RADIUS);
   active_particles = game->get_active_particles();
 
   // Color particles init
@@ -154,6 +160,7 @@ int main(int argc, char** argv)
     RGB[k][1] = ((float) rand()) / ((float) RAND_MAX);
     RGB[k][2] = ((float) rand()) / ((float) RAND_MAX);
   }
+  
   // main particle in white
   RGB[n-1][0] = 1;
   RGB[n-1][1] = 1;

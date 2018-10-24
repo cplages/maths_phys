@@ -18,7 +18,7 @@ void ParticleContactResolver::resolve_contacts()
   int i = 0;
 
   //resolve
-  while(i < max_iteration/*size*/ && !stop_iterate)
+  while(i < max_iteration && !stop_iterate)
     {
       float min_vs = collisions[0]->compute_vs();
       ParticleContact* tmp_contact = collisions[0];
@@ -38,10 +38,9 @@ void ParticleContactResolver::resolve_contacts()
       else
   	 {
   	  tmp_contact->resolve(FRAME_INTERVAL);
-    }
+	 }
 
-    //  collisions[i]->resolve(FRAME_INTERVAL);
-      ++i;
+       ++i;
     }
 
 }

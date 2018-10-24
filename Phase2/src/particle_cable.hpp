@@ -11,7 +11,7 @@ private:
   float coeff_restitution;
   
 public:
-  ParticleCable(Particle* particles[2], float max_length, float coeff_restitution);
+  ParticleCable(Particle* particles[2], float coeff_restitution, float max_length);
 
   ParticleContact* add_contact();
   

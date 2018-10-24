@@ -21,8 +21,6 @@ private:
   float radius;
 
   Vector3D accum_force; //resulting force
-  // Vector3D gravity; //Float in constructor convert to Vector in attributes
-  // float dumping;
 
 public:
   Particle();

@@ -8,14 +8,15 @@
 #include "../src/particle_spring_generator.hpp"
 #include "../src/particle_cable.hpp"
 
+/* class responsible for the physic of the game*/
 class GameWorld {
 
 private:
   int particle_number;
+  
+  float floor_height;
 
   ForceRegister * particles_and_forces;
-
-  Particle * floor_particle;
 
   Particle * main_particle;
   ParticleGravityGenerator * gravity_generator;

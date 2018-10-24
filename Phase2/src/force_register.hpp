@@ -8,11 +8,12 @@
 
 class ForceRegister {
 public:
-
+  
   struct ForceRecording {
     Particle *particle;
     ParticleForceGenerator *fg;
   };
+  
   typedef std::vector<struct ForceRecording> records;
   records forces;
 

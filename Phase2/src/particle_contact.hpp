@@ -11,6 +11,7 @@ private:
   float coeff_restitution;
   Vector3D normal_vector;
   float penetration;
+  bool contact_cable;
 
   void resolve_velocity();
   void resolve_interpenetration();
@@ -20,7 +21,7 @@ private:
 
 public:
 
-  ParticleContact(Particle* particle_a, Particle* particle_b, float coeff_restitution, float penetration);
+  ParticleContact(Particle* particle_a, Particle* particle_b, float coeff_restitution, float penetration, bool contact_cable);
 
   float compute_vs();
 

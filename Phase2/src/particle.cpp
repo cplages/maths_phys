@@ -79,8 +79,7 @@ void Particle::integrate(float t){
 
   //Update velocity
   Vector3D at = this->acceleration * t;
-  Vector3D new_v = this->velocity /* * pow(this->dumping, t)*/ + at;
-
+  Vector3D new_v = this->velocity + at;
   this->velocity = new_v;
 
   this->clear_accum();
@@ -118,8 +117,6 @@ Particle& Particle::operator =(Particle const& p) {
   this->velocity = p.velocity;
   this->acceleration = p.acceleration;
   this->inverse_mass = p.inverse_mass;
-  // this->gravity = p.gravity;
-  // this->dumping = p.dumping;
   return *this;
 }
 

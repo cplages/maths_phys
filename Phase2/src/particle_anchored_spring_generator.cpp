@@ -3,15 +3,13 @@
 #include "particle_anchored_spring_generator.hpp"
 
 
-
-ParticleAnchoredSpringGenerator::ParticleAnchoredSpringGenerator(Vector3D anchored_point){
+ParticleAnchoredSpringGenerator::ParticleAnchoredSpringGenerator(Vector3D anchored_point) {
   this->anchored_point = anchored_point;
   this->k = k;
   this->l0 = l0;
 }
 
-
-void  ParticleAnchoredSpringGenerator::update_force(Particle * particle, float period){
+void  ParticleAnchoredSpringGenerator::update_force(Particle * particle, float period) {
 
   Vector3D dist = anchored_point - particle->get_position();
   float l = dist.norm();
