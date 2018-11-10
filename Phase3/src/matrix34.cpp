@@ -127,3 +127,12 @@ Matrix34 set_orientation(Quaternion q){
 
   return result;
 }
+
+
+Vector3D apply_transformation(Matrix34 transform, Vector3D v){
+  return transform * v;
+}
+
+Vector3D apply_inverse_transformation(Matrix34 transform, Vector3D v){
+  return transform.inverse() * v;
+}

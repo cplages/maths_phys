@@ -32,5 +32,8 @@ Matrix34 operator * (Matrix34 const& m1, Matrix34 const& m2);
 
 Matrix34 set_orientation(Quaternion q);
 
+Vector3D apply_transformation(Matrix34 transform, Vector3D v);
+Vector3D apply_inverse_transformation(Matrix34 transform, Vector3D v);
+
 
 #endif
