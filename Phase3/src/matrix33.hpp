@@ -19,9 +19,6 @@ public:
   Matrix33 inverse();
   Matrix33 transpose();
 
-
-
-
   //operators
   Matrix33& operator = (Matrix33 const& m);
 
