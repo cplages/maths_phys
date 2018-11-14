@@ -5,6 +5,7 @@
 #include "particle_contact.hpp"
 #include "particle_link.hpp"
 
+/* Identical to a ParticleCable with 0 for the restitution coefficient */
 class ParticleRod : public ParticleLink {
 private:
   float max_length;

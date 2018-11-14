@@ -3,7 +3,6 @@
 #include "particle_spring_generator.hpp"
 
 
-
 ParticleSpringGenerator::ParticleSpringGenerator(Particle * other_particle, float k, float l0){
   this->other_particle = other_particle;
   this->k = k;

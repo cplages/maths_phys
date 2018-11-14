@@ -20,6 +20,7 @@ void ParticleContactResolver::resolve_contacts()
   //resolve
   while(i < max_iteration && !stop_iterate)
     {
+      //resolve the contact with the minimal separation velocity
       float min_vs = collisions[0]->compute_vs();
       ParticleContact* tmp_contact = collisions[0];
       for(int j = 1; j < size; ++j)
@@ -31,6 +32,7 @@ void ParticleContactResolver::resolve_contacts()
     	      tmp_contact = collisions[j];
     	   }
        }
+      //if all separation velocity are positives then all contacts are resolved
        if(min_vs >= 0)
     	{
     	  stop_iterate = true;

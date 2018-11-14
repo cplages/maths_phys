@@ -1,6 +1,7 @@
 #ifndef _VECTOR_3D_
 #define _VECTOR_3D_
 
+#include "matrix33.hpp"
 /* Class representing 3D Vector
 
 Attributes : x,y,z
@@ -38,6 +39,8 @@ public:
   Vector3D proj( Vector3D *v) const;
   float distance(Vector3D *v) const;
   float triple_product(Vector3D *v,Vector3D *w) const;
+  Vector3D local_to_world(Vector3D point, Matrix33 transform_matrix);
+  Vector3D world_to_local(Vector3D point, Matrix33 transform_matrix);
   void display();
 
   //operators

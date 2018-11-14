@@ -12,6 +12,7 @@ ParticleCable::ParticleCable(Particle* particles[], float coeff_restitution, flo
 
 ParticleContact* ParticleCable::add_contact()
 {
+  //produce a force only if current length is beyond max_length.
   if(get_length() >= max_length)
   {
     return new ParticleContact(particles[0], particles[1], coeff_restitution, 0, true); 

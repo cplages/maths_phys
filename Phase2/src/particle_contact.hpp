@@ -11,6 +11,8 @@ private:
   float coeff_restitution;
   Vector3D normal_vector;
   float penetration;
+
+  //true if the contact is from a cable
   bool contact_cable;
 
   void resolve_velocity();

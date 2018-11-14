@@ -127,6 +127,17 @@ float Vector3D::triple_product(Vector3D *v,Vector3D *w) const {
   return this->dot_product(&result_cross_product);
 }
 
+//transform point from local reference to world reference.
+Vector3D local_to_world(Vector3D point, Matrix33 transform_matrix) {
+  return transform_matrix * point;
+}
+
+//transform point from world reference to local reference.
+Vector3D world_to_local(Vector3D point, Matrix33 transform_matrix) {
+  return (transform_matrix.inverse()) * point;
+}
+
+
 // Print the attributes of the vector
 void Vector3D::display(){
   printf("(%f, %f, %f) \n", this->x, this->y, this->z);
@@ -167,6 +178,7 @@ Vector3D& Vector3D::operator +=(const Vector3D& v){
   this->z += v.z;
   return *this;
 }
+
 
 // Addition operator
 Vector3D operator +(Vector3D const& v, Vector3D const& w) {

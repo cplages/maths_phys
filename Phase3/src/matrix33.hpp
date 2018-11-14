@@ -24,6 +24,8 @@ public:
 
 };
 
+Matrix33 quaternion_to_matrix(Quaternion q);
+
 //binary operators outside the class
 Matrix33 operator * (Matrix33 const& m, float const& f);
 Vector3D operator * (Matrix33 const& m, Vector3D const& v);
