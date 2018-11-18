@@ -3,23 +3,23 @@
 
 #include <vector>
 
-#include "particle.hpp"
-#include "particle_force_generator.hpp"
+#include "rigidbody.hpp"
+#include "rigidbody_force_generator.hpp"
 
 class ForceRegister {
 public:
-  
+
   struct ForceRecording {
-    Particle *particle;
-    ParticleForceGenerator *fg;
+    Rigidbody *rigidbody;
+    RigidbodyForceGenerator *fg;
   };
-  
+
   typedef std::vector<struct ForceRecording> records;
   records forces;
 
 
-  void add(Particle *particle, ParticleForceGenerator *fg);
-  void erase(Particle *particle, ParticleForceGenerator *fg);
+  void add(Rigidbody *rigidbody, RigidbodyForceGenerator *fg);
+  void erase(Rigidbody *rigidbody, RigidbodyForceGenerator *fg);
   int count();
 
   records get_force_register();

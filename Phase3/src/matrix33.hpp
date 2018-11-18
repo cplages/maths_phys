@@ -2,6 +2,7 @@
 #define _MATRIX_33_
 
 #include "vector3D.hpp"
+#include "quaternion.hpp"
 
 /*
  Class representing 3*3 Matrix

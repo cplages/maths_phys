@@ -1,23 +1,23 @@
 #include "force_register.hpp"
 
 //add a force to apply to a particle in the register.
-void ForceRegister::add(Particle *particle, ParticleForceGenerator *fg) {
+void ForceRegister::add(Rigidbody *rigidbody, RigidbodyForceGenerator *fg) {
   struct ForceRecording tmp;
-  tmp.particle = particle;
+  tmp.rigidbody = rigidbody;
   tmp.fg = fg;
   forces.push_back(tmp);
 }
 
 //remove a force applied to a particle from the register.
-void ForceRegister::erase(Particle *particle, ParticleForceGenerator *fg) {
+void ForceRegister::erase(Rigidbody *rigidbody, RigidbodyForceGenerator *fg) {
   struct ForceRecording tmp;
-  tmp.particle = particle;
+  tmp.rigidbody = rigidbody;
   tmp.fg = fg;
 
   bool found = false;
   records::iterator it = forces.begin();
   while (it != forces.end() && !found) {
-    if((it->particle == tmp.particle) && (it->fg == tmp.fg)) {
+    if((it->rigidbody == tmp.rigidbody) && (it->fg == tmp.fg)) {
       found = true;
       forces.erase(it);
     }

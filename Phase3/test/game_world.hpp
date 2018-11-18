@@ -2,35 +2,22 @@
 #define GAME_WORLD_H
 
 #include <vector>
-#include "../src/particle.hpp"
-#include "../src/particle_contact_generator.hpp"
-#include "../src/particle_contact_resolver.hpp"
-#include "../src/particle_spring_generator.hpp"
-#include "../src/particle_cable.hpp"
 
 /* class responsible for the physic of the game*/
 class GameWorld {
 
 private:
-  int particle_number;
-  
-  float floor_height;
 
-  ForceRegister * particles_and_forces;
+  ForceRegister * rigidbodies_and_forces;
 
-  Particle * main_particle;
-  ParticleGravityGenerator * gravity_generator;
-
-  std::vector<Particle*> sub_particles;
-  ParticleSpringGenerator * spring_generator;
-
-  std::vector<ParticleCable *> cable_generators;
+  Rigidbody * main_rigidbody;
+  RigidbodyGravityGenerator * gravity_generator;
 
 
 public:
-  GameWorld(int n, float radius_particle);
+  GameWorld();
 
-  std::vector<Particle*> get_active_particles();
+  Rigidbody* get_rigidbody();
   void execute(float * current_time);
   void call_all_force_generator();
 

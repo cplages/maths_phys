@@ -13,7 +13,7 @@
 //camera
 #define CAMERA_EYE_X 0
 #define CAMERA_EYE_Y 0
-#define CAMERA_EYE_Z 100
+#define CAMERA_EYE_Z 10
 
 #define CAMERA_VIEW_X 0
 #define CAMERA_VIEW_Y 0
