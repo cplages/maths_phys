@@ -11,18 +11,19 @@
 class Matrix34{
 
 public:
-  int width;
-  int height;
+  static const int height = 3;
+  static const int width = 4;
   float m[3][4];
 
   Matrix34();
   Matrix34(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l);
 
   Matrix34 inverse();
+  static Matrix34 identity_matrix();
 
   //operators
   Matrix34& operator = (Matrix34 const& m);
-
+  bool operator ==(Matrix34 const& v);
 };
 
 //binary operators outside the class

@@ -8,8 +8,6 @@
 
 //constructors
 Matrix34::Matrix34(){
-  height = 3;
-  width = 4;
     for (int i = 0; i<height; i++){
       for (int j = 0; j<width; j++){
         m[i][j] = 0;
@@ -18,8 +16,6 @@ Matrix34::Matrix34(){
 }
 
 Matrix34::Matrix34(float a, float b, float c, float d, float e, float f, float g, float h, float i, float j, float k, float l){
-    height = 3;
-    width = 4;
     m[0][0] = a;
     m[0][1] = b;
     m[0][2] = c;
@@ -63,6 +59,14 @@ Matrix34 Matrix34::inverse(){
   return Matrix34();
 }
 
+Matrix34 Matrix34::identity_matrix() {
+  Matrix34 identity = Matrix34();
+  for(int i = 0; i < height; ++i) {
+    identity.m[i][i] = 1;
+  }
+  return identity;
+}
+
 
 //operators
 Matrix34& Matrix34::operator = (Matrix34 const& m){
@@ -71,10 +75,21 @@ Matrix34& Matrix34::operator = (Matrix34 const& m){
       this->m[i][j] = m.m[i][j];
     }
   }
-  this->width = m.width;
-  this->height = m.height;
   return *this;
 }
+
+bool Matrix34::operator ==(Matrix34 const& v) {
+  bool is_equal = true;
+  for (int i = 0; i<height; i++){
+    for (int j = 0; j<width; j++){
+      if(this->m[i][j] != v.m[i][j]) {
+	is_equal = false;
+      }
+    }
+  }
+  return is_equal;
+}
+
 
 //binary operators outside the class
 Matrix34 operator * (Matrix34 const& m, float const& f){
@@ -90,10 +105,10 @@ Matrix34 operator * (Matrix34 const& m, float const& f){
 Vector3D operator * (Matrix34 const& m, Vector3D const& v){
   Vector3D result = Vector3D();
   for (int i = 0; i<m.height; i++){
-    //ignore the translation part (to not modify the vector)
     for (int j = 0; j<m.width-1; j++){
       result.set_by_index(i, result.get_by_index(i) + m.m[i][j] * v.get_by_index(i));
     }
+    result.set_by_index(i, result.get_by_index(i) + m.m[i][m.width - 1]);
   }
   return result;
 }
@@ -106,7 +121,7 @@ Matrix34 operator * (Matrix34 const& m1, Matrix34 const& m2){
         copy.m[i][j] += m1.m[i][k] * m2.m[k][j]; //inchallah
       }
     }
-    copy.m[i][copy.width-1] = m2.m[i][m2.width-1]; //inchallah we believe in the Grizzly
+    copy.m[i][copy.width-1] = m1.m[i][m1.width-1] + m2.m[i][m2.width-1]; //inchallah we believe in the Grizzly
   }
   return copy;
 }
@@ -130,9 +145,9 @@ Matrix34 set_orientation(Quaternion q){
 
 
 Vector3D apply_transformation(Matrix34 transform, Vector3D v){
-  return transform * v;
+  return transform/*.get_linear_transform()*/ * v;
 }
 
 Vector3D apply_inverse_transformation(Matrix34 transform, Vector3D v){
-  return transform.inverse() * v;
+  return transform/*.get_linear_transform().inverse()*/ * v;
 }

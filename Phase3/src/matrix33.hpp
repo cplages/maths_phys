@@ -11,7 +11,7 @@
 class Matrix33{
 
 public:
-  int size;
+  static const int size = 3 ;
   float m[3][3];
 
   Matrix33();
@@ -20,8 +20,11 @@ public:
   Matrix33 inverse();
   Matrix33 transpose();
 
+  static Matrix33 identity_matrix();
+  
   //operators
   Matrix33& operator = (Matrix33 const& m);
+  bool operator ==(Matrix33 const& v);
 
 };
 

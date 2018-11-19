@@ -41,6 +41,7 @@ Rigidbody::Rigidbody(Vector3D p0, Vector3D r0, Vector3D v0, float m0, float ld0,
   this->orientation = o0;
   this->transform_matrix = transform0;
 
+  
   this->accum_force = Vector3D();
   this->accum_torque = Vector3D();
 }
@@ -58,6 +59,15 @@ float Rigidbody::get_inverse_mass(){
 }
 
 void Rigidbody::calcul_derived_data() {
+
+  for (int i = 0; i < 3; i++){
+    for (int j = 0; j < 4; j++){
+      printf("%f\t", transform_matrix.m[i][j]);
+    }
+    printf("\n");
+  }
+  printf("\n");
+
   //Rotation part of the transform matrix
   Matrix33 tmp_transform = quaternion_to_matrix(orientation);
   for (int i = 0; i < tmp_transform.size; i++){
@@ -67,9 +77,12 @@ void Rigidbody::calcul_derived_data() {
   }
   //Position part of the transform matrix
   for (int i = 0; i < transform_matrix.height - 1; i++){
-    transform_matrix.m[3][i] = position.get_by_index(i);
+    transform_matrix.m[i][3] = position.get_by_index(i);
   }
 
+
+  
+  
   inverse_inertia_tensor = tmp_transform * inverse_inertia_tensor * tmp_transform.inverse();
 
 }
@@ -105,10 +118,9 @@ void Rigidbody::integrate(float t) {
   Vector3D vt = this->velocity * t;
   Vector3D new_p = this->position + vt;
   this->position = new_p;
-
+  
   //Update orientation
   this->orientation.update_angular_velocity(this->rotation, t);
-
   this->calcul_derived_data();
 
   this->clear_accum();
@@ -140,10 +152,10 @@ Matrix33 Rigidbody::get_linear_transform(){
 
 //transform point from local reference to world reference.
 Vector3D Rigidbody::local_to_world(Vector3D point) {
-  return get_linear_transform() * point;
+  return transform_matrix * point;
 }
 
 //transform point from world reference to local reference.
 Vector3D Rigidbody::world_to_local(Vector3D point) {
-  return (get_linear_transform().inverse()) * point;
+  return (transform_matrix.inverse()) * point;
 }

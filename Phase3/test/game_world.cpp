@@ -30,7 +30,9 @@ GameWorld::GameWorld(){
   int dz = 1;
   float m = 10;
   Matrix33 rectangle_tensor = Matrix33((1/12) * m * (pow(dy,2) + pow(dz,2)), 0, 0, 0, (1/12) * m * (pow(dx,2) + pow(dz,2)), 0, 0, 0, (1/12) * m * (pow(dx,2) + pow(dy,2)));
-  main_rigidbody = new Rigidbody(Vector3D(), Vector3D(), Vector3D(), m, 1, 1, Quaternion(), Matrix34(), rectangle_tensor.inverse());
+  
+  main_rigidbody = new Rigidbody(Vector3D(), Vector3D(0, 0, 11), Vector3D(), m, 1, 1, Quaternion(sqrt(2)/2,0,0,sqrt(2)/2), Matrix34::identity_matrix(), rectangle_tensor.inverse());
+  
   gravity_generator = new RigidbodyGravityGenerator(Vector3D(0,GRAVITY_VALUE,0));
   rigidbodies_and_forces->add(main_rigidbody, gravity_generator);
 

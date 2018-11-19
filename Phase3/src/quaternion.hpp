@@ -14,11 +14,13 @@ public:
 
   void normalize();
 
+  Quaternion& operator = (Quaternion const& q);
   Quaternion& operator += (Quaternion const& q);
   Quaternion& operator *= (Quaternion const& q);
 
   void do_rotation(Vector3D v);
   void update_angular_velocity(Vector3D v, float interval);
+  void display();
 };
 
 Quaternion operator + (Quaternion const& q1, Quaternion const& q2);

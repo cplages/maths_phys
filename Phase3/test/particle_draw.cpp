@@ -48,17 +48,18 @@ void display(void)
   glColor3f(1., 1., 1.);
 
   Vector3D p = game->get_rigidbody()->get_position();
-  p.display();
-  int radius = 2;
-  Vector3D vertice1 = Vector3D(-radius,-radius,0);
-  Vector3D vertice2 = Vector3D(-radius,radius,0);
-  Vector3D vertice3 = Vector3D(radius,radius,0);
-  Vector3D vertice4 = Vector3D(radius,-radius,0);
-
+  float width = 0.5;
+  float height = 1;
+  Vector3D vertice1 = Vector3D(-width, -height, 0);
+  Vector3D vertice2 = Vector3D(-width, height, 0);
+  Vector3D vertice3 = Vector3D(width, height, 0);
+  Vector3D vertice4 = Vector3D(width, -height, 0);
+  
   vertice1 = game->get_rigidbody()->local_to_world(vertice1);
   vertice2 = game->get_rigidbody()->local_to_world(vertice2);
   vertice3 = game->get_rigidbody()->local_to_world(vertice3);
   vertice4 = game->get_rigidbody()->local_to_world(vertice4);
+
   //floor display
   glBegin(GL_POLYGON);
 
@@ -150,7 +151,7 @@ int main(int argc, char** argv)
   glutReshapeFunc(reshape);
   glutIdleFunc(update_physic);
   gluLookAt(CAMERA_EYE_X, CAMERA_EYE_Y, CAMERA_EYE_Z, CAMERA_VIEW_X, CAMERA_VIEW_Y, CAMERA_VIEW_Z, CAMERA_UP_X, CAMERA_UP_Y, CAMERA_UP_Z);
-
+  printf("gravity value! : %f\n", GRAVITY_VALUE);
   glutMainLoop();
   return 0;
 }

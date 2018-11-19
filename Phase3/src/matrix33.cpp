@@ -7,7 +7,6 @@
 
 //constructors
 Matrix33::Matrix33(){
-  size = 3;
     for (int i = 0; i<size; i++){
       for (int j = 0; j<size; j++){
         m[i][j] = 0;
@@ -16,7 +15,6 @@ Matrix33::Matrix33(){
 }
 
 Matrix33::Matrix33(float a, float b, float c, float d, float e, float f, float g, float h, float i){
-    size = 3;
     m[0][0] = a;
     m[0][1] = b;
     m[0][2] = c;
@@ -68,6 +66,14 @@ Matrix33 Matrix33::transpose(){
   return transpose_m;
 }
 
+Matrix33 Matrix33::identity_matrix(){
+  Matrix33 identity = Matrix33();
+  for(int i = 0; i < size; ++i) {
+    identity.m[i][i] = 1;
+  }
+  return identity;
+}
+
 
 //operators
 Matrix33& Matrix33::operator = (Matrix33 const& m){
@@ -76,9 +82,22 @@ Matrix33& Matrix33::operator = (Matrix33 const& m){
       this->m[i][j] = m.m[i][j];
     }
   }
-  this->size = m.size;
   return *this;
 }
+
+bool Matrix33::operator ==(Matrix33 const& v) {
+  bool is_equal = true;
+  for (int i = 0; i<size; i++){
+    for (int j = 0; j<size; j++){
+      if(this->m[i][j] != v.m[i][j]) {
+	is_equal = false;
+      }
+    }
+  }
+  return is_equal;
+}
+
+
 
 Matrix33 quaternion_to_matrix(Quaternion q) {
     Matrix33 result = Matrix33( (1 - (2 * pow(q.coord[2],2) + 2 * pow(q.coord[3],2))),
