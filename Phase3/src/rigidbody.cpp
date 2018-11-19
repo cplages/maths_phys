@@ -41,7 +41,7 @@ Rigidbody::Rigidbody(Vector3D p0, Vector3D r0, Vector3D v0, float m0, float ld0,
   this->orientation = o0;
   this->transform_matrix = transform0;
 
-  
+
   this->accum_force = Vector3D();
   this->accum_torque = Vector3D();
 }
@@ -68,6 +68,7 @@ void Rigidbody::calcul_derived_data() {
   }
   printf("\n");
 
+//  rotation.display();
   //Rotation part of the transform matrix
   Matrix33 tmp_transform = quaternion_to_matrix(orientation);
   for (int i = 0; i < tmp_transform.size; i++){
@@ -80,9 +81,6 @@ void Rigidbody::calcul_derived_data() {
     transform_matrix.m[i][3] = position.get_by_index(i);
   }
 
-
-  
-  
   inverse_inertia_tensor = tmp_transform * inverse_inertia_tensor * tmp_transform.inverse();
 
 }
@@ -118,7 +116,7 @@ void Rigidbody::integrate(float t) {
   Vector3D vt = this->velocity * t;
   Vector3D new_p = this->position + vt;
   this->position = new_p;
-  
+
   //Update orientation
   this->orientation.update_angular_velocity(this->rotation, t);
   this->calcul_derived_data();

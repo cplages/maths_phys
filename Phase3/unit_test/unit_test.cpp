@@ -28,11 +28,11 @@ void matrix34_multiply_vector() {
 
 //quaternion_to_matrix
 void quaternion_to_matrix_test() {
-  Quaternion q = Quaternion(1,1,1,1);
+  Quaternion q = Quaternion(0.5,0.5,0.5,0.5);
 
-  Matrix33 result = Matrix33(-3, 4, 0, 0, -3, 4, 4, 0, -3);
+  Matrix33 result = Matrix33(0,0,1,1,0,0,0,1,0);
   assert(result == quaternion_to_matrix(q));
-  
+
 }
 
 //inverse matrix 33
@@ -46,7 +46,7 @@ void inverse_matrix_33() {
 
 //inverse matrix 34
 
-// void inverse_matrix_34() {
+//void inverse_matrix_34() {
 //   Matrix34 m1 = Matrix34(0,1,1,1,2,2,2,2,3,3,3,3);
 
 //   Matrix34 result = Matrix34();
@@ -54,14 +54,42 @@ void inverse_matrix_33() {
 //   assert(result == m1.inverse());
 // }
 
-//do rotation
+//do rotation (quaternion multiply)
+void quaternion_multiply(){
+  Quaternion q1 = Quaternion(1,2,3,4);
+  Quaternion q2 = Quaternion(1,2,3,4);
 
-//quaternion *=
+  Quaternion result = Quaternion(-28,4,6,8);
+
+  q1 *= q2;
+
+  assert(q1 == result);
+}
 
 //quaternion * float
+void quaternion_float_multiply(){
+  Quaternion q1 = Quaternion(1,2,3,4);
+  float f = 2;
 
-//update angular velocity
+  Quaternion result = Quaternion(2,4,6,8);
+  Quaternion q2 = q1 * f;
 
+  assert(q2 == result);
+}
+
+//quaternion +
+void quaternion_addition(){
+  Quaternion q1 = Quaternion(1,2,3,4);
+  Quaternion q2 = Quaternion(1,2,3,4);
+
+  Quaternion result = Quaternion(2,4,6,8);
+
+  Quaternion q3 = q1 + q2;
+  q1 += q2;
+
+  assert(q1 == result);
+  assert(q3 == result);
+}
 
 int main() {
   printf("test launched....1\n");
@@ -72,7 +100,12 @@ int main() {
   quaternion_to_matrix_test();
   printf("test launched....4\n");
   inverse_matrix_33();
+  printf("test launched....5\n");
+  quaternion_multiply();
+  printf("test launched....6\n");
+  quaternion_float_multiply();
+  printf("test launched....7\n");
+  quaternion_addition();
   printf("all done! \n");
   return 0;
 }
-

@@ -11,8 +11,8 @@
 #define WINDOW_POSITION_Y 100
 
 //camera
-#define CAMERA_EYE_X 0
-#define CAMERA_EYE_Y 0
+#define CAMERA_EYE_X 10
+#define CAMERA_EYE_Y 10
 #define CAMERA_EYE_Z 50
 
 #define CAMERA_VIEW_X 0

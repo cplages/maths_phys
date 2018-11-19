@@ -50,23 +50,29 @@ void display(void)
   Vector3D p = game->get_rigidbody()->get_position();
   float width = 0.5;
   float height = 1;
-  Vector3D vertice1 = Vector3D(-width, -height, 0);
-  Vector3D vertice2 = Vector3D(-width, height, 0);
-  Vector3D vertice3 = Vector3D(width, height, 0);
-  Vector3D vertice4 = Vector3D(width, -height, 0);
-  
-  vertice1 = game->get_rigidbody()->local_to_world(vertice1);
-  vertice2 = game->get_rigidbody()->local_to_world(vertice2);
-  vertice3 = game->get_rigidbody()->local_to_world(vertice3);
-  vertice4 = game->get_rigidbody()->local_to_world(vertice4);
+  float deepness = 1;
+  Vector3D vertices[8];
+  vertices[0] = Vector3D(-width, -height, -deepness);
+  vertices[1] = Vector3D(-width, height, -deepness);
+  vertices[2] = Vector3D(width, height, -deepness);
+  vertices[3] = Vector3D(width, -height, -deepness);
+  vertices[4] = Vector3D(width, -height, deepness);
+  vertices[5] = Vector3D(width, height, deepness);
+  vertices[6] = Vector3D(-width, height, deepness);
+  vertices[7] = Vector3D(-width, -height, deepness);
+
+  for(int i =0 ; i < 8; ++i)
+  {
+    vertices[i] = game->get_rigidbody()->local_to_world(vertices[i]);
+  }
 
   //floor display
   glBegin(GL_POLYGON);
 
-  glVertex3f(vertice1.get_x(), vertice1.get_y(), vertice1.get_z());
-  glVertex3f(vertice2.get_x(), vertice2.get_y(), vertice2.get_z());
-  glVertex3f(vertice3.get_x(), vertice3.get_y(), vertice3.get_z());
-  glVertex3f(vertice4.get_x(), vertice4.get_y(), vertice4.get_z());
+  for(int i =0 ; i < 8; ++i)
+  {
+    glVertex3f(vertices[i].get_x(), vertices[i].get_y(), vertices[i].get_z());
+  }
 
   glEnd();
 

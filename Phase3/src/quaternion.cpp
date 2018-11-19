@@ -41,6 +41,17 @@ void Quaternion::normalize(){
   }
 }
 
+
+bool Quaternion::operator == (Quaternion const& q2){
+  bool is_equal = true;
+  for (int i = 0; i < this->size; i++){
+    if (this->coord[i] !=  q2.coord[i]){
+      is_equal = false;
+    }
+  }
+  return is_equal;
+}
+
 Quaternion& Quaternion::operator = (Quaternion const& q){
   for (int i = 0; i < size; i++){
     this->coord[i] = q.coord[i];
@@ -56,14 +67,17 @@ Quaternion& Quaternion::operator += (Quaternion const& q){
 }
 
 Quaternion& Quaternion::operator *= (Quaternion const& q){
-  this->coord[0] = this->coord[0] * q.coord[0] - this->coord[1] * q.coord[1] - this->coord[2] * q.coord[2] - this->coord[3] * q.coord[3];
-  
-  this->coord[1] = this->coord[0] * q.coord[1] + this->coord[1] * q.coord[0] + this->coord[2] * q.coord[3] - this->coord[3] * q.coord[2];
-  
-  this->coord[2] = this->coord[0] * q.coord[2] + this->coord[2] * q.coord[0] + this->coord[3] * q.coord[1] - this->coord[1] * q.coord[3];
-  
-  this->coord[3] = this->coord[0] * q.coord[3] + this->coord[3] * q.coord[0] + this->coord[1] * q.coord[2] - this->coord[2] * q.coord[1]; 
-    return *this;
+  Quaternion tmp = *this;
+
+  this->coord[0] = tmp.coord[0] * q.coord[0] - tmp.coord[1] * q.coord[1] - tmp.coord[2] * q.coord[2] - tmp.coord[3] * q.coord[3];
+
+  this->coord[1] = tmp.coord[0] * q.coord[1] + tmp.coord[1] * q.coord[0] + tmp.coord[2] * q.coord[3] - tmp.coord[3] * q.coord[2];
+
+  this->coord[2] = tmp.coord[0] * q.coord[2] + tmp.coord[2] * q.coord[0] + tmp.coord[3] * q.coord[1] - tmp.coord[1] * q.coord[3];
+
+  this->coord[3] = tmp.coord[0] * q.coord[3] + tmp.coord[3] * q.coord[0] + tmp.coord[1] * q.coord[2] - tmp.coord[2] * q.coord[1];
+
+  return *this;
 }
 
 void Quaternion::do_rotation(Vector3D v){

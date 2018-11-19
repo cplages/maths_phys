@@ -14,6 +14,7 @@ public:
 
   void normalize();
 
+  bool operator == (Quaternion const& q2);
   Quaternion& operator = (Quaternion const& q);
   Quaternion& operator += (Quaternion const& q);
   Quaternion& operator *= (Quaternion const& q);
@@ -25,5 +26,6 @@ public:
 
 Quaternion operator + (Quaternion const& q1, Quaternion const& q2);
 Quaternion operator * (Quaternion const& q, float f);
+
 
 #endif
