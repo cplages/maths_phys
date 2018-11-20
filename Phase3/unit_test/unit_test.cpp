@@ -91,6 +91,14 @@ void quaternion_addition(){
   assert(q3 == result);
 }
 
+void quaternion_normalization() {
+  Quaternion q1 = Quaternion(1,1,1,1);
+
+  Quaternion result = Quaternion(0.5,0.5,0.5,0.5);
+  q1.normalize();
+  assert(q1 == result);
+}
+
 int main() {
   printf("test launched....1\n");
   matrix33_multiply_test();
@@ -106,6 +114,8 @@ int main() {
   quaternion_float_multiply();
   printf("test launched....7\n");
   quaternion_addition();
+  printf("test launched....8\n");
+  quaternion_normalization();
   printf("all done! \n");
   return 0;
 }

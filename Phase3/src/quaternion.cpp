@@ -19,6 +19,7 @@ Quaternion::Quaternion(float r, float i, float j, float k){
   coord[1] = i;
   coord[2] = j;
   coord[3] = k;
+  this->normalize();
 }
 
 void Quaternion::normalize(){

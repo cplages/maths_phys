@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <GL/glew.h>
 #include <GL/glut.h>
 #include <math.h>
 #include <vector>
@@ -23,8 +24,11 @@ using namespace std;
 // physic handler
 GameWorld *game;
 
+int side_number = 6;
+int vertex_per_side = 4;
+
 //rigidbody color
-float RGB[MAX_PARTICLES][3];
+float RGB[6][3];
 
 float current_time;
 
@@ -45,36 +49,148 @@ void display(void)
      GL_DEPTH_BUFFER_BIT
      );
 
-  glColor3f(1., 1., 1.);
-
   Vector3D p = game->get_rigidbody()->get_position();
   float width = 0.5;
   float height = 1;
   float deepness = 1;
-  Vector3D vertices[8];
-  vertices[0] = Vector3D(-width, -height, -deepness);
-  vertices[1] = Vector3D(-width, height, -deepness);
-  vertices[2] = Vector3D(width, height, -deepness);
-  vertices[3] = Vector3D(width, -height, -deepness);
-  vertices[4] = Vector3D(width, -height, deepness);
-  vertices[5] = Vector3D(width, height, deepness);
-  vertices[6] = Vector3D(-width, height, deepness);
-  vertices[7] = Vector3D(-width, -height, deepness);
 
-  for(int i =0 ; i < 8; ++i)
+  Vector3D vertices[side_number][vertex_per_side];
+  //back side
+  //red
+  RGB[0][0] = 1;
+  RGB[0][1] = 0;
+  RGB[0][2] = 0;
+  //side
+  vertices[0][0] = Vector3D(-width, -height, -deepness);
+  vertices[0][1] = Vector3D(width, -height, -deepness);
+  vertices[0][2] = Vector3D(width, height, -deepness);
+  vertices[0][3] = Vector3D(-width, height, -deepness);
+
+  //bottom side
+  RGB[1][0] = 0.5;
+  RGB[1][1] = 1;
+  RGB[1][2] = 0;
+  vertices[1][0] = Vector3D(-width, -height, -deepness);
+  vertices[1][1] = Vector3D(width, -height, -deepness);
+  vertices[1][2] = Vector3D(width, -height, deepness);
+  vertices[1][3] = Vector3D(-width, -height, deepness);
+  
+  //left side
+  //orange
+  RGB[2][0] = 1;
+  RGB[2][1] = 0.5;
+  RGB[2][2] = 0;
+  vertices[2][0] = Vector3D(-width, -height, -deepness);
+  vertices[2][1] = Vector3D(-width, height, -deepness);
+  vertices[2][2] = Vector3D(-width, height, deepness);
+  vertices[2][3] = Vector3D(-width, -height, deepness);
+
+    //right side
+  RGB[3][0] = 1;
+  RGB[3][1] = 1;
+  RGB[3][2] = 0;
+  vertices[3][0] = Vector3D(width, -height, -deepness);
+  vertices[3][1] = Vector3D(width, height, -deepness);
+  vertices[3][2] = Vector3D(width, height, deepness);
+  vertices[3][3] = Vector3D(width, -height, deepness);
+
+  
+  //up side
+  RGB[4][0] = 1;
+  RGB[4][1] = 1;
+  RGB[4][2] = 1;
+  vertices[4][0] = Vector3D(-width, height, -deepness);
+  vertices[4][1] = Vector3D(width, height, -deepness);
+  vertices[4][2] = Vector3D(width, height, deepness);
+  vertices[4][3] = Vector3D(-width, height, deepness);
+
+  //front side
+  RGB[5][0] = 0;
+  RGB[5][1] = 0;
+  RGB[5][2] = 1;
+  vertices[5][0] = Vector3D(-width, -height, deepness);
+  vertices[5][1] = Vector3D(width, -height, deepness);
+  vertices[5][2] = Vector3D(width, height, deepness);
+  vertices[5][3] = Vector3D(-width, height, deepness);
+
+  int size = side_number * vertex_per_side * 3;
+  GLfloat vertex_buffer_data[size] = {0};
+  for(int i =5 ; i < side_number; ++i)
   {
-    vertices[i] = game->get_rigidbody()->local_to_world(vertices[i]);
+    for(int j = 0 ; j < vertex_per_side; ++j) {
+      vertices[i][j] = game->get_rigidbody()->local_to_world(vertices[i][j]);
+      // vertex_buffer_data[vertex_per_side * i + j * 3] = tmp.get_x();
+      // vertex_buffer_data[vertex_per_side * i + j * 3 + 1] = tmp.get_y();
+      // vertex_buffer_data[vertex_per_side * i + j * 3 + 2] = tmp.get_z();
+    }
+  }
+  for(int i = 0; i < vertex_per_side - 1; ++i) {
+    printf("distance d'un côté: %f\n", vertices[5][i].distance(&vertices[5][i+1]));
+  }
+  printf("distance d'un côté: %f\n", vertices[5][0].distance(&vertices[5][vertex_per_side - 1]));
+  
+  printf("\n");
+  /*GLuint vertexbuffer;
+  glGenBuffers(1, &vertexbuffer);
+  glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+  glBufferData(GL_ARRAY_BUFFER, size, vertex_buffer_data, GL_STATIC_DRAW);*/
+  
+  for(int i = 5; i < side_number; ++i)
+  {
+    glBegin(GL_POLYGON);
+    glColor3f(RGB[i][0], RGB[i][1], RGB[i][2]);
+    for(int j = 0 ; j < vertex_per_side; ++j)
+      {
+	glVertex3f(vertices[i][j].get_x(), vertices[i][j].get_y(), vertices[i][j].get_z());
+      }
+    glEnd();
+    }
+  
+  /*  GLfloat color_buffer_data[side_number * vertex_per_side *3] = {0};
+  for(int i =0 ; i < side_number; ++i)
+  {
+    for(int j = 0 ; j < vertex_per_side; ++j) {
+      vertex_buffer_data[vertex_per_side * i + j * 3] = RGB[i][0];
+      vertex_buffer_data[vertex_per_side * i + j * 3 + 1] = RGB[i][1];
+      vertex_buffer_data[vertex_per_side * i + j * 3 + 2] = RGB[i][2];
+    }
   }
 
-  //floor display
-  glBegin(GL_POLYGON);
+  
+  GLuint colorbuffer;
+  glGenBuffers(1, &colorbuffer);
+  glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(color_buffer_data), color_buffer_data, GL_STATIC_DRAW);
 
-  for(int i =0 ; i < 8; ++i)
-  {
-    glVertex3f(vertices[i].get_x(), vertices[i].get_y(), vertices[i].get_z());
-  }
+  
+  glEnableVertexAttribArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+  glVertexAttribPointer(
+			0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+			);
 
-  glEnd();
+  // 2nd attribute buffer : colors
+  glEnableVertexAttribArray(1);
+  glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+  glVertexAttribPointer(
+			1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
+			3,                                // size
+			GL_FLOAT,                         // type
+			GL_FALSE,                         // normalized?
+			0,                                // stride
+			(void*)0                          // array buffer offset
+			);
+
+  // Draw the triangle !
+  glDrawArrays(GL_QUADS, 0, size); // 12*3 indices starting at 0 -> 12 triangles
+
+  glDisableVertexAttribArray(0);
+  glDisableVertexAttribArray(1);*/
 
   glutSwapBuffers();
   glutPostRedisplay();
@@ -153,6 +269,9 @@ int main(int argc, char** argv)
   glutInitWindowPosition(WINDOW_POSITION_X, WINDOW_POSITION_Y);
   glutCreateWindow("Rigidbody animations");
   //glutKeyboardFunc(handler_event);
+  glewInit();
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
   glutIdleFunc(update_physic);

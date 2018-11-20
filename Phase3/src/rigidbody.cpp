@@ -79,7 +79,7 @@ void Rigidbody::calcul_derived_data() {
   //Position part of the transform matrix
   for (int i = 0; i < transform_matrix.height - 1; i++){
     transform_matrix.m[i][3] = position.get_by_index(i);
-  }
+    }
 
   inverse_inertia_tensor = tmp_transform * inverse_inertia_tensor * tmp_transform.inverse();
 
@@ -119,6 +119,7 @@ void Rigidbody::integrate(float t) {
 
   //Update orientation
   this->orientation.update_angular_velocity(this->rotation, t);
+  this->orientation.normalize();
   this->calcul_derived_data();
 
   this->clear_accum();

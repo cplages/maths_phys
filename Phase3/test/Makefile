@@ -14,7 +14,7 @@ reset_draw: clean draw
 compile: $(OBJ)
 
 link: $(OBJ) $(DEP)
-	g++ -o test $^ -lGLU -lGL -lglut
+	g++ -o test $^ -lGLU -lGL -lglut -lGLEW
 run: link
 	./test
 

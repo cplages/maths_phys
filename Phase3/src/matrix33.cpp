@@ -100,7 +100,8 @@ bool Matrix33::operator ==(Matrix33 const& v) {
 
 
 Matrix33 quaternion_to_matrix(Quaternion q) {
-    Matrix33 result = Matrix33( (1 - (2 * pow(q.coord[2],2) + 2 * pow(q.coord[3],2))),
+  q.normalize();
+  Matrix33 result = Matrix33( (1 - (2 * pow(q.coord[2],2) + 2 * pow(q.coord[3],2))),
   ((2 * q.coord[1] * q.coord[2]) - (2 * q.coord[3] * q.coord[0])),
   ((2 * q.coord[1] * q.coord[3]) + (2 * q.coord[2] * q.coord[0])),
   ((2 * q.coord[1] * q.coord[2]) + (2 * q.coord[3] * q.coord[0])),
