@@ -21,6 +21,8 @@ public:
   Matrix33 transpose();
 
   static Matrix33 identity_matrix();
+
+  void display() const;
   
   //operators
   Matrix33& operator = (Matrix33 const& m);

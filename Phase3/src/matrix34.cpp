@@ -106,7 +106,7 @@ Vector3D operator * (Matrix34 const& m, Vector3D const& v){
   Vector3D result = Vector3D();
   for (int i = 0; i<m.height; i++){
     for (int j = 0; j<m.width-1; j++){
-      result.set_by_index(i, result.get_by_index(i) + m.m[i][j] * v.get_by_index(i));
+      result.set_by_index(i, result.get_by_index(i) + m.m[i][j] * v.get_by_index(j));
     }
     result.set_by_index(i, result.get_by_index(i) + m.m[i][m.width - 1]);
   }

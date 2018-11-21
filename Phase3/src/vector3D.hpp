@@ -38,7 +38,7 @@ public:
   Vector3D proj( Vector3D *v) const;
   float distance(Vector3D *v) const;
   float triple_product(Vector3D *v,Vector3D *w) const;
-  void display();
+  void display() const;
 
   //operators
   bool operator ==(Vector3D const& v);

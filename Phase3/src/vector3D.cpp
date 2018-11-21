@@ -131,7 +131,7 @@ float Vector3D::triple_product(Vector3D *v,Vector3D *w) const {
 
 
 // Print the attributes of the vector
-void Vector3D::display(){
+void Vector3D::display() const{
   printf("(%f, %f, %f) \n", this->x, this->y, this->z);
 }
 

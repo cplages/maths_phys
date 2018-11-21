@@ -74,6 +74,15 @@ Matrix33 Matrix33::identity_matrix(){
   return identity;
 }
 
+void Matrix33::display() const {
+  for(int i = 0; i < size; ++i) {
+    for(int j = 0; j < size; ++j) {
+      printf("%f \t",this->m[i][j]);
+    }
+    printf("\n");
+  }
+  printf("\n\n");
+}
 
 //operators
 Matrix33& Matrix33::operator = (Matrix33 const& m){

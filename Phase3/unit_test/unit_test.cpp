@@ -22,7 +22,7 @@ void matrix34_multiply_vector() {
   Matrix34 m1 = Matrix34(1,2,3,1,4,5,6,1,7,8,9,1);
   Vector3D v1 = Vector3D(1,2,3);
 
-  Vector3D result = Vector3D(7, 31, 73);
+  Vector3D result = Vector3D(15, 33, 51);
   assert(result == m1 * v1);
 }
 

@@ -60,15 +60,6 @@ float Rigidbody::get_inverse_mass(){
 
 void Rigidbody::calcul_derived_data() {
 
-  for (int i = 0; i < 3; i++){
-    for (int j = 0; j < 4; j++){
-      printf("%f\t", transform_matrix.m[i][j]);
-    }
-    printf("\n");
-  }
-  printf("\n");
-
-//  rotation.display();
   //Rotation part of the transform matrix
   Matrix33 tmp_transform = quaternion_to_matrix(orientation);
   for (int i = 0; i < tmp_transform.size; i++){
@@ -102,6 +93,9 @@ void Rigidbody::integrate(float t) {
   //Angular acceleration
   Vector3D angular_acceleration = this->inverse_inertia_tensor * this->accum_torque;
 
+  // printf("angular acc = \t");
+  // angular_acceleration.display();
+  
   //Update velocity
   Vector3D at = acceleration * t;
   Vector3D new_v = this->velocity * pow(linear_damping, t) + at;
@@ -111,7 +105,7 @@ void Rigidbody::integrate(float t) {
   Vector3D angular_at = angular_acceleration * t;
   Vector3D new_ang_v = this->rotation * pow(angular_damping, t) + angular_at;
   this->rotation = new_ang_v;
-
+  
   //Update position
   Vector3D vt = this->velocity * t;
   Vector3D new_p = this->position + vt;
@@ -119,7 +113,6 @@ void Rigidbody::integrate(float t) {
 
   //Update orientation
   this->orientation.update_angular_velocity(this->rotation, t);
-  this->orientation.normalize();
   this->calcul_derived_data();
 
   this->clear_accum();
@@ -131,12 +124,12 @@ void Rigidbody::add_force(const Vector3D &force) {
 }
 
 void Rigidbody::add_torque(const Vector3D &torque) {
-  accum_torque += torque;
+   accum_torque += torque;
 }
 
 void Rigidbody::clear_accum() {
   accum_force = Vector3D();
-  accum_force = Vector3D();
+  accum_torque = Vector3D();
 }
 
 Matrix33 Rigidbody::get_linear_transform(){

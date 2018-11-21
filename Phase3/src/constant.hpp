@@ -12,11 +12,11 @@
 
 //camera
 #define CAMERA_EYE_X 0
-#define CAMERA_EYE_Y -3
-#define CAMERA_EYE_Z -10
+#define CAMERA_EYE_Y 3
+#define CAMERA_EYE_Z 20
 
 #define CAMERA_VIEW_X 0
-#define CAMERA_VIEW_Y -3
+#define CAMERA_VIEW_Y 3
 #define CAMERA_VIEW_Z 0
 
 #define CAMERA_UP_X 0
@@ -38,4 +38,7 @@
 /* physic constants*/
 #define GRAVITY_VALUE -0.05
 
+/* Rectangle properties*/
+#define VERTEX_PER_SIDE 4
+#define SIDE_NUMBER 6
 #endif
