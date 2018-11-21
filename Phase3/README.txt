@@ -1,4 +1,4 @@
-Projet Mathématiques et Physique pour le Jeu Vidéo - Phase 2
+Projet Mathématiques et Physique pour le Jeu Vidéo - Phase 3
 
 
 Pour compiler le projet :
@@ -7,9 +7,15 @@ Pour compiler le projet :
   make clean pour nettoyer le répertoire
 
 
-Pour lancer le jeu : 
+Pour lancer les animations : 
 
-  make 
+  make
+  
+  la première démo se lancera automatiquement, vous pouvez appuyer sur la touche "d" pour changer de démo, à tout moment.
 
-Une fenêtre s'ouvrira affichant un amas de particule suivant une particule principale (celle de couleur blanche).
-Afin de déplacer la particule principale, utilisez les touches ZQSD de votre clavier.
+Pour lancer les tests unitaires :
+
+  se placer dans le répertoire /test
+  make clean pour nettoyer le répertoire
+  make pour compiler et linker les tests
+  ./unit_test pour exectuer les tests
