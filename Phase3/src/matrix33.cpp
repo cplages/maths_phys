@@ -149,7 +149,7 @@ Matrix33 operator * (Matrix33 const& m1, Matrix33 const& m2){
   for (int i = 0; i<copy.size; i++){
     for (int j = 0; j<copy.size; j++){
       for (int k = 0; k<copy.size; k++){
-        copy.m[i][j] += m1.m[i][k] * m2.m[k][j]; //inchallah
+        copy.m[i][j] += m1.m[i][k] * m2.m[k][j];
       }
     }
   }

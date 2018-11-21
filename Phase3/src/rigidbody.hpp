@@ -42,7 +42,6 @@ public:
   void add_torque(const Vector3D &torque);
   void clear_accum();
 
-  Matrix33 get_linear_transform();
   Vector3D local_to_world(Vector3D point);
   Vector3D world_to_local(Vector3D point);
 

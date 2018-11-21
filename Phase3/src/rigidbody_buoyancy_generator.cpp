@@ -28,5 +28,5 @@ void RigidbodyBuoyancyGenerator::update_force(Rigidbody * rigidbody, float perio
   }
 
   force = Vector3D(0, value, 0);
-  rigidbody->add_force(force);
+  rigidbody->add_force_at_point(force,rigidbody->get_position());
 }

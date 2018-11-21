@@ -26,5 +26,5 @@ void RigidbodyBungeeGenerator::update_force(Rigidbody * rigidbody, float period)
     Vector3D force = unit_dist * coef;
   }
 
-  rigidbody->add_force(force);
+  rigidbody->add_force_at_point(force,rigidbody->get_position());
 }

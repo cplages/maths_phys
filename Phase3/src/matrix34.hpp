@@ -2,6 +2,7 @@
 #define _MATRIX_34_
 
 #include "vector3D.hpp"
+#include "matrix33.hpp"
 #include "quaternion.hpp"
 
 /*
@@ -20,6 +21,8 @@ public:
 
   Matrix34 inverse();
   static Matrix34 identity_matrix();
+
+  Matrix33 get_linear_transform();
 
   //operators
   Matrix34& operator = (Matrix34 const& m);

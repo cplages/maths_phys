@@ -20,5 +20,5 @@ void  RigidbodySpringGenerator::update_force(Rigidbody * rigidbody, float period
   float coef = -(this->k) * (l  - this->l0);
   Vector3D force = unit_dist * coef;
 
-  rigidbody->add_force(force);
+  rigidbody->add_force_at_point(force, rigidbody->get_position());
 }

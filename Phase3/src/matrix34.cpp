@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "matrix33.hpp"
 #include "matrix34.hpp"
 #include "vector3D.hpp"
 #include "quaternion.hpp"
@@ -37,7 +38,7 @@ Matrix34 Matrix34::inverse(){
     + (m[2][0] * m[0][1] * m[1][2])
     - (m[0][0] * m[2][1] * m[1][2])
     - (m[1][0] * m[0][1] * m[2][2])
-    + (m[0][0] * m[1][1] * m[2][2]); // ERRORROROROROROR.
+    + (m[0][0] * m[1][1] * m[2][2]);
 
   if (d != 0){
 
@@ -67,6 +68,15 @@ Matrix34 Matrix34::identity_matrix() {
   return identity;
 }
 
+Matrix33 Matrix34::get_linear_transform(){
+  Matrix33 linear_transform = Matrix33();
+  for (int i = 0; i < linear_transform.size; i++){
+    for (int j = 0; j < linear_transform.size; j++){
+      linear_transform.m[i][j] = this->m[i][j];
+    }
+  }
+  return linear_transform;
+}
 
 //operators
 Matrix34& Matrix34::operator = (Matrix34 const& m){
@@ -118,10 +128,10 @@ Matrix34 operator * (Matrix34 const& m1, Matrix34 const& m2){
   for (int i = 0; i<copy.height; i++){
     for (int j = 0; j<copy.width-1; j++){
       for (int k = 0; k<copy.height; k++){
-        copy.m[i][j] += m1.m[i][k] * m2.m[k][j]; //inchallah
+        copy.m[i][j] += m1.m[i][k] * m2.m[k][j];
       }
     }
-    copy.m[i][copy.width-1] = m1.m[i][m1.width-1] + m2.m[i][m2.width-1]; //inchallah we believe in the Grizzly
+    copy.m[i][copy.width-1] = m1.m[i][m1.width-1] + m2.m[i][m2.width-1];
   }
   return copy;
 }
@@ -145,9 +155,11 @@ Matrix34 set_orientation(Quaternion q){
 
 
 Vector3D apply_transformation(Matrix34 transform, Vector3D v){
-  return transform/*.get_linear_transform()*/ * v;
+  return transform.get_linear_transform() * v;
 }
 
 Vector3D apply_inverse_transformation(Matrix34 transform, Vector3D v){
-  return transform/*.get_linear_transform().inverse()*/ * v;
+  return transform.get_linear_transform().inverse() * v;
 }
+
+

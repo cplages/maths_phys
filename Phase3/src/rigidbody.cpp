@@ -76,7 +76,6 @@ void Rigidbody::calcul_derived_data() {
 
 }
 
-//modified grizzly is useless.
 void Rigidbody::add_force_at_point(Vector3D force, Vector3D point) {
   point = world_to_local(point);
   add_force_at_body_point(force, point);
@@ -92,9 +91,6 @@ void Rigidbody::integrate(float t) {
   Vector3D acceleration = this->accum_force * this->inverse_mass;
   //Angular acceleration
   Vector3D angular_acceleration = this->inverse_inertia_tensor * this->accum_torque;
-
-  // printf("angular acc = \t");
-  // angular_acceleration.display();
   
   //Update velocity
   Vector3D at = acceleration * t;
@@ -132,15 +128,6 @@ void Rigidbody::clear_accum() {
   accum_torque = Vector3D();
 }
 
-Matrix33 Rigidbody::get_linear_transform(){
-  Matrix33 linear_transform = Matrix33();
-  for (int i = 0; i < linear_transform.size; i++){
-    for (int j = 0; j < linear_transform.size; j++){
-      linear_transform.m[i][j] = transform_matrix.m[i][j];
-    }
-  }
-  return linear_transform;
-}
 
 //transform point from local reference to world reference.
 Vector3D Rigidbody::local_to_world(Vector3D point) {
