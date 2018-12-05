@@ -3,11 +3,7 @@
 
 #include "vector3D.hpp"
 #include "rigidbody.hpp"
-
-struct bounding_sphere {
-  Vector3D center;
-  float radius;
-};
+#include "primitive.hpp"
 
 class OcTree {
 private:
@@ -17,7 +13,7 @@ private:
   Vector3D position;
   Vector3D dimension;
 
-  bounding_sphere * objects_contained;
+  Primitive * objects_contained;
 
   void create_children(OcTree * parent, int depth);
 
@@ -30,8 +26,6 @@ public:
   void display(OcTree * parent);
 
 };
-
-struct bounding_sphere rigidbody_to_sphere(Rigidbody r0);
 
 
 #endif //_OC_TREE_H_

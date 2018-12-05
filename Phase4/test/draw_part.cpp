@@ -16,6 +16,7 @@
 #include "../src/rigidbody_force_generator.hpp"
 #include "../src/rigidbody_gravity_generator.hpp"
 #include "../src/force_register.hpp"
+#include "../src/plane.hpp"
 
 #include "game_world.hpp"
 
@@ -34,7 +35,7 @@ float current_time;
 
 // apply physic to the game
 void update_physic(){
-  game->execute(&current_time);
+  //  game->execute(&current_time);
   glutPostRedisplay();
 }
 
@@ -95,61 +96,73 @@ void display(void)
      GL_COLOR_BUFFER_BIT |
      GL_DEPTH_BUFFER_BIT
      );
-  float width = 0.5;
-  float height = 1;
-  float deepness = 1;
-  if(exercice_1) {
-    Vector3D vertices[SIDE_NUMBER][VERTEX_PER_SIDE];    
-    float RGB[3] = {1,0,0};
+  float width = 10;
+  float height = 5;
+  float deepness = 2;
+  //Vector3D vertices[SIDE_NUMBER][VERTEX_PER_SIDE];    
+  float RGB[3] = {1,0,0};
     
-    create_rectangle(game->get_main_rigidbody(), vertices, width, height, deepness); 
+  //create_rectangle(game->get_main_rigidbody(), vertices, width, height, deepness); 
 
-    
-    for(int i = 0; i < SIDE_NUMBER; ++i)
-      {
-	glBegin(GL_POLYGON);
-	glColor3f(RGB[0], RGB[1], RGB[2]);
-	for(int j = 0 ; j < VERTEX_PER_SIDE; ++j)
-	  {
-	    glVertex3f(vertices[i][j].get_x(), vertices[i][j].get_y(), vertices[i][j].get_z());
-	  }
-	glEnd();
-      }
+  Rigidbody r = Rigidbody();
+  Plane plane = Plane(&r, 10,5,2);
+
+  Vector3D * vertices = plane.get_vertex();
+
+  float coeff = 0;
+  float coeff_x = 4;
+  float coeff_y = 2;
+  float coeff_z = 1;
+  glBegin(GL_POLYGON);
+  glColor3f(RGB[0], RGB[1], RGB[2]);
+  //x_lock
+  coeff = 4;
+  printf("vertex coordinate\n");
+  for(int i = 0; i < 2; ++i) {
+    for(int j = 0; j < 4; ++j) {
+      int index = i * coeff + j;
+      printf("%d,", index);
+      glVertex3f(vertices[index].get_x(), vertices[index].get_y(), vertices[index].get_z());
+    }
+    printf("\n");
   }
-  else {
-    
-    Vector3D vertices_main[SIDE_NUMBER][VERTEX_PER_SIDE];
-    Vector3D vertices_second[SIDE_NUMBER][VERTEX_PER_SIDE];    
-    float RGB_main[3] = {1,0,0};
-    float RGB_second[3] = {0.3,0.7,0};
-    
-    create_rectangle(game->get_main_rigidbody(), vertices_main, width, height, deepness); 
-    create_rectangle(game->get_second_rigidbody(), vertices_second, width, height, deepness); 
 
-    //first object
-    for(int i = 0; i < SIDE_NUMBER; ++i)
-      {
-	glBegin(GL_POLYGON);
-	glColor3f(RGB_main[0], RGB_main[1], RGB_main[2]);
-	for(int j = 0 ; j < VERTEX_PER_SIDE; ++j)
-	  {
-	    glVertex3f(vertices_main[i][j].get_x(), vertices_main[i][j].get_y(), vertices_main[i][j].get_z());
-	  }
-	glEnd();
-      }
-
-    //second object
-    for(int i = 0; i < SIDE_NUMBER; ++i)
-      {
-	glBegin(GL_POLYGON);
-	glColor3f(RGB_second[0], RGB_second[1], RGB_second[2]);
-	for(int j = 0 ; j < VERTEX_PER_SIDE; ++j)
-	  {
-	    glVertex3f(vertices_second[i][j].get_x(), vertices_second[i][j].get_y(), vertices_second[i][j].get_z());
-	  }
-	glEnd();
-      }
+  
+  //y_lock
+  coeff = 2;
+  for(int i = 0; i < 2; ++i) {
+    for(int j = 0; j < 2; ++j) {
+      	int index = i * coeff + j ;
+	printf("%d,", index);
+	glVertex3f(vertices[index].get_x(), vertices[index].get_y(), vertices[index].get_z());
+    }
+    for(int k = 2; k > 0; --k) {
+      int index = i * coeff + coeff_x + (k-1) ;
+	printf("%d,", index);
+	glVertex3f(vertices[index].get_x(), vertices[index].get_y(), vertices[index].get_z());
+    }
+    printf("\n");
   }
+  
+
+  //z_lock
+  coeff = 1;
+  for(int i = 0; i < 2; ++i) {
+    for(int j = 0; j < 2; ++j) {
+      int index = i * coeff + j * coeff_y;
+      printf("%d,", index);
+      glVertex3f(vertices[index].get_x(), vertices[index].get_y(), vertices[index].get_z());
+    }
+    for(int k = 2; k > 0; --k) {
+      int index = i * coeff + (k + 1) * coeff_y ;
+      printf("%d,", index);
+      glVertex3f(vertices[index].get_x(), vertices[index].get_y(), vertices[index].get_z());
+    }
+    printf("\n");
+  }
+   
+   
+  glEnd();
   glutSwapBuffers();
   glutPostRedisplay();
 }
@@ -172,12 +185,6 @@ void reshape(int width, int height)
 
 // Catch the input of the player
 void handler_event(unsigned char key, int x, int y) {
-    switch(key) {
-    case 'd':
-      game->change_demo();
-      exercice_1 = !exercice_1;
-      break;
-    }
   glutPostRedisplay();
 }
 
