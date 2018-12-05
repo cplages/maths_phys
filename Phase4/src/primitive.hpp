@@ -3,12 +3,14 @@
 
 #include "vector3D.hpp"
 #include "rigidbody.hpp"
-
+#include "matrix34.hpp"
 
 class Primitive {
 
 private:
   Rigidbody * rigidbody;
+  Matrix34 offset;
+
 
 public:
 
@@ -16,9 +18,11 @@ public:
 
   Primitive(Rigidbody * r0);
 
-  Vector3D get_position();
+  Primitive(Rigidbody * r0, Matrix34 o);
 
-  Vector3D get_velocity();
+  Rigidbody * get_rigidbody();
+
+  Matrix34 get_offset();
 
 };
 

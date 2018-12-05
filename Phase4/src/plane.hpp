@@ -7,25 +7,17 @@
 
 class Plane : public Primitive {
 private:
-  Vector3D half_size;
+  Vector3D normal;
+  float offset;
 
-  int number_vertex_per_face = 4;
-  int number_face = 6;
-  
-  Vector3D * vertex;
-
-  void calculate_vertex_coordinate();
-  
 public:
   Plane();
-  Plane(Rigidbody * r0, float width, float height, float deepness);
+  Plane(Vector3D n, float o);
 
-  Vector3D get_half_size();
+  Vector3D get_normal();
+  float get_offset();
 
-  Vector3D * get_vertex();
-
-  void display_vertex();
-  
+  float get_distance_from_point(Vector3D point);
 };
 
 #endif //PLANE_H_
