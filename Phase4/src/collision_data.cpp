@@ -26,6 +26,14 @@ void CollisionData::add_contact(Contact c){
 }
 
 
+int CollisionData::get_current_size() {
+  return current_size;
+}
+
+Contact CollisionData::get_contact() {
+  return contacts[0];
+}
+
 //Only for contacts between plane and box
 void generate_contacts(Box * box, Plane * plane, CollisionData * data){
   Vector3D * box_vertices = box->get_vertices();

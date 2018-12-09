@@ -24,6 +24,10 @@ public:
 
   Matrix34 get_offset();
 
+  bool virtual primitive_in_octree(Vector3D p0, Vector3D d0);
+
+  virtual ~Primitive();
+
 };
 
 

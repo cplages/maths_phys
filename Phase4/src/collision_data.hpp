@@ -20,6 +20,9 @@ public:
 
   void add_contact(Contact c);
 
+  int get_current_size();
+
+  Contact get_contact();
 
 };
 

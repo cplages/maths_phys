@@ -25,3 +25,13 @@ Rigidbody * Primitive::get_rigidbody() {
 Matrix34 Primitive::get_offset(){
   return offset;
 }
+
+//virtual methode redifined in Box and Plane
+bool Primitive::primitive_in_octree(Vector3D p0, Vector3D d0)
+{
+  return false;
+}
+
+Primitive::~Primitive(){
+
+}

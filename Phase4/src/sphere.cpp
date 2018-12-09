@@ -6,7 +6,7 @@ Sphere::Sphere():Primitive() {
   radius = 0;
 }
 
-Sphere::Sphere(Rigidbody * r0, float radius0):Primitive(r0) {
+Sphere::Sphere(Rigidbody * r0, float radius0):Primitive(r0, Matrix34::identity_matrix()) {
   radius = radius0;
 }
 

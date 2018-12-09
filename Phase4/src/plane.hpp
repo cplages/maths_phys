@@ -18,6 +18,7 @@ public:
   float get_offset();
 
   float get_distance_from_point(Vector3D point);
+  bool primitive_in_octree(Vector3D p0, Vector3D d0);
 };
 
 #endif //PLANE_H_

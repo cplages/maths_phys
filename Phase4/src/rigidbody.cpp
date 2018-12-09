@@ -68,7 +68,7 @@ void Rigidbody::calcul_derived_data() {
     }
   }
   //Position part of the transform matrix
-  for (int i = 0; i < transform_matrix.height - 1; i++){
+  for (int i = 0; i < transform_matrix.height; i++){
     transform_matrix.m[i][3] = position.get_by_index(i);
     }
 
@@ -91,7 +91,7 @@ void Rigidbody::integrate(float t) {
   Vector3D acceleration = this->accum_force * this->inverse_mass;
   //Angular acceleration
   Vector3D angular_acceleration = this->inverse_inertia_tensor * this->accum_torque;
-  
+
   //Update velocity
   Vector3D at = acceleration * t;
   Vector3D new_v = this->velocity * pow(linear_damping, t) + at;
@@ -101,7 +101,7 @@ void Rigidbody::integrate(float t) {
   Vector3D angular_at = angular_acceleration * t;
   Vector3D new_ang_v = this->rotation * pow(angular_damping, t) + angular_at;
   this->rotation = new_ang_v;
-  
+
   //Update position
   Vector3D vt = this->velocity * t;
   Vector3D new_p = this->position + vt;

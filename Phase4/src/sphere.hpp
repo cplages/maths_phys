@@ -13,7 +13,7 @@ public:
   Sphere(Rigidbody * r0, float radius0);
 
   float get_radius();
-  
+
 };
 
 

@@ -22,71 +22,113 @@
 
 using namespace std;
 
-//current exercice
-bool exercice_1 = true;
 
 // physic handler
 GameWorld *game;
 
-
 float current_time;
 
-
+bool display_occured = false;
 
 // apply physic to the game
 void update_physic(){
-  //  game->execute(&current_time);
+  if(!game->collision_occured()) {
+    game->execute(&current_time);
+  }
+  else{
+    if(!display_occured) {
+      game->display_contact();
+      display_occured = true;
+    }
+  }
   glutPostRedisplay();
 }
 
-//create all vertices for a cube.
-void create_rectangle(Rigidbody *object, Vector3D (*vertices)[VERTEX_PER_SIDE] ,float width, float height, float deepness)
-{
+// Create box vertices sorted by faces
+Vector3D * vertices_to_object_faces(Box * box){
 
-  //back side
-  vertices[0][0] = Vector3D(-width, -height, -deepness);
-  vertices[0][1] = Vector3D(width, -height, -deepness);
-  vertices[0][2] = Vector3D(width, height, -deepness);
-  vertices[0][3] = Vector3D(-width, height, -deepness);
+    Vector3D * vertices = box->get_vertices();
 
-  //bottom side
-  vertices[1][0] = Vector3D(-width, -height, -deepness);
-  vertices[1][1] = Vector3D(width, -height, -deepness);
-  vertices[1][2] = Vector3D(width, -height, deepness);
-  vertices[1][3] = Vector3D(-width, -height, deepness);
-  
-  //left side
-  vertices[2][0] = Vector3D(-width, -height, -deepness);
-  vertices[2][1] = Vector3D(-width, height, -deepness);
-  vertices[2][2] = Vector3D(-width, height, deepness);
-  vertices[2][3] = Vector3D(-width, -height, deepness);
+    Vector3D * faces_coord = new Vector3D[24];
+    int current_index = 0;
 
-  //right side
-  vertices[3][0] = Vector3D(width, -height, -deepness);
-  vertices[3][1] = Vector3D(width, height, -deepness);
-  vertices[3][2] = Vector3D(width, height, deepness);
-  vertices[3][3] = Vector3D(width, -height, deepness);
-  
-  //up side
-  vertices[4][0] = Vector3D(-width, height, -deepness);
-  vertices[4][1] = Vector3D(width, height, -deepness);
-  vertices[4][2] = Vector3D(width, height, deepness);
-  vertices[4][3] = Vector3D(-width, height, deepness);
+    float coeff = 0;
+    float coeff_x = 4;
+    float coeff_y = 2;
+    float coeff_z = 1;
 
-  //front side
-  vertices[5][0] = Vector3D(-width, -height, deepness);
-  vertices[5][1] = Vector3D(width, -height, deepness);
-  vertices[5][2] = Vector3D(width, height, deepness);
-  vertices[5][3] = Vector3D(-width, height, deepness);
-
-  //put the coordinate in the world.
-  for(int i = 0; i < SIDE_NUMBER; ++i) {    
-    for(int j = 0 ; j < VERTEX_PER_SIDE; ++j) {
-      vertices[i][j] = object->local_to_world(vertices[i][j]);
+    //x_lock
+    coeff = 4;
+    for(int i = 0; i < 2; ++i) {
+      for(int j = 0; j < 4; ++j) {
+        int index = i * coeff + j;
+        faces_coord[current_index] = vertices[index];
+        current_index++;
+      }
     }
-  }
+
+    //y_lock
+    coeff = 2;
+    for(int i = 0; i < 2; ++i) {
+      for(int j = 0; j < 2; ++j) {
+        int index = i * coeff + j ;
+        faces_coord[current_index] = vertices[index];
+        current_index++;
+      }
+      for(int k = 2; k > 0; --k) {
+        int index = i * coeff + coeff_x + (k-1) ;
+        faces_coord[current_index] = vertices[index];
+        current_index++;
+      }
+    }
+
+    //z_lock
+    coeff = 1;
+    for(int i = 0; i < 2; ++i) {
+      for(int j = 0; j < 2; ++j) {
+        int index = i * coeff + j * coeff_y;
+        faces_coord[current_index] = vertices[index];
+        current_index++;
+      }
+      for(int k = 2; k > 0; --k) {
+        int index = i * coeff + (k + 1) * coeff_y ;
+        faces_coord[current_index] = vertices[index];
+        current_index++;
+      }
+    }
+
+    return faces_coord;
 }
 
+// Simulate wall from a plan
+Vector3D * plane_to_vertices(Plane plane){
+
+  float offset = plane.get_offset();
+  Vector3D normal = plane.get_normal();
+
+  Vector3D * plane_vertices = new Vector3D[4];
+
+  if (normal.get_x() != 0){
+    plane_vertices[0] = normal * (-offset) + Vector3D(0,-HALF_HEIGHT, -HALF_WIDTH);
+    plane_vertices[1] = normal * (-offset) + Vector3D(0,-HALF_HEIGHT, HALF_WIDTH);
+    plane_vertices[2] = normal * (-offset) + Vector3D(0, HALF_HEIGHT, HALF_WIDTH);
+    plane_vertices[3] = normal * (-offset) + Vector3D(0, HALF_HEIGHT, -HALF_WIDTH);
+  }
+  else if (normal.get_y() != 0){
+    plane_vertices[0] = normal * (-offset) + Vector3D(-HALF_WIDTH, 0, -HALF_HEIGHT);
+    plane_vertices[1] = normal * (-offset) + Vector3D(HALF_WIDTH, 0, -HALF_HEIGHT);
+    plane_vertices[2] = normal * (-offset) + Vector3D(HALF_WIDTH, 0, HALF_HEIGHT);
+    plane_vertices[3] = normal * (-offset) + Vector3D(-HALF_WIDTH, 0, HALF_HEIGHT);
+  }
+  else if (normal.get_z() != 0){
+    plane_vertices[0] = normal * (-offset) + Vector3D(-HALF_WIDTH, -HALF_HEIGHT, 0);
+    plane_vertices[1] = normal * (-offset) + Vector3D(HALF_WIDTH, -HALF_HEIGHT, 0);
+    plane_vertices[2] = normal * (-offset) + Vector3D(HALF_WIDTH, HALF_HEIGHT, 0);
+    plane_vertices[3] = normal * (-offset) + Vector3D(-HALF_WIDTH, HALF_HEIGHT, 0);
+  }
+
+  return plane_vertices;
+}
 
 // Display function called every frame
 void display(void)
@@ -96,73 +138,52 @@ void display(void)
      GL_COLOR_BUFFER_BIT |
      GL_DEPTH_BUFFER_BIT
      );
-  float width = 10;
-  float height = 5;
-  float deepness = 2;
-  //Vector3D vertices[SIDE_NUMBER][VERTEX_PER_SIDE];    
-  float RGB[3] = {1,0,0};
-    
-  //create_rectangle(game->get_main_rigidbody(), vertices, width, height, deepness); 
 
-  Rigidbody r = Rigidbody();
-  Plane plane = Plane(&r, 10,5,2);
+  float RGB_box[3] = {1,0,0};
+  float RGB_collision_wall[3] = {0.8  , 0.5, 0};
+  float RGB_plane[5][3] = { {0,0,0.5}, {0,0.5,0}, {0,0.5,0.5}, {0,1,1}, {0,0,1}};
 
-  Vector3D * vertices = plane.get_vertex();
+  Vector3D * box_vertices_to_draw = vertices_to_object_faces(game->get_main_box());
+  Plane * walls = game->get_walls();
 
-  float coeff = 0;
-  float coeff_x = 4;
-  float coeff_y = 2;
-  float coeff_z = 1;
+  Plane * collision_wall = NULL;
+
+  //Planes
+  for (int i = 0; i < 5;  i++){
+    Vector3D * plane_vertices_to_draw = plane_to_vertices(walls[i]);
+    if(display_occured) {
+      if(walls[i].get_normal() == game->get_normal_contact()) {
+        collision_wall = &walls[i];
+      }
+    }
+    glBegin(GL_POLYGON);
+    glColor3f(RGB_plane[i][0], RGB_plane[i][1], RGB_plane[i][2]);
+    for (int j = 0; j < 4; j++){
+      glVertex3f(plane_vertices_to_draw[j].get_x(), plane_vertices_to_draw[j].get_y(), plane_vertices_to_draw[j].get_z());
+    }
+    glEnd();
+  }
+
+  //Re draw the collision wall in a different color
   glBegin(GL_POLYGON);
-  glColor3f(RGB[0], RGB[1], RGB[2]);
-  //x_lock
-  coeff = 4;
-  printf("vertex coordinate\n");
-  for(int i = 0; i < 2; ++i) {
-    for(int j = 0; j < 4; ++j) {
-      int index = i * coeff + j;
-      printf("%d,", index);
-      glVertex3f(vertices[index].get_x(), vertices[index].get_y(), vertices[index].get_z());
+  glColor3f(RGB_collision_wall[0], RGB_collision_wall[1], RGB_collision_wall[2]);
+  if(display_occured)
+  {
+    Vector3D * plane_vertices_to_draw = plane_to_vertices(*collision_wall);
+    for (int j = 0; j < 4; j++){
+      glVertex3f(plane_vertices_to_draw[j].get_x(), plane_vertices_to_draw[j].get_y(), plane_vertices_to_draw[j].get_z());
     }
-    printf("\n");
   }
-
-  
-  //y_lock
-  coeff = 2;
-  for(int i = 0; i < 2; ++i) {
-    for(int j = 0; j < 2; ++j) {
-      	int index = i * coeff + j ;
-	printf("%d,", index);
-	glVertex3f(vertices[index].get_x(), vertices[index].get_y(), vertices[index].get_z());
-    }
-    for(int k = 2; k > 0; --k) {
-      int index = i * coeff + coeff_x + (k-1) ;
-	printf("%d,", index);
-	glVertex3f(vertices[index].get_x(), vertices[index].get_y(), vertices[index].get_z());
-    }
-    printf("\n");
-  }
-  
-
-  //z_lock
-  coeff = 1;
-  for(int i = 0; i < 2; ++i) {
-    for(int j = 0; j < 2; ++j) {
-      int index = i * coeff + j * coeff_y;
-      printf("%d,", index);
-      glVertex3f(vertices[index].get_x(), vertices[index].get_y(), vertices[index].get_z());
-    }
-    for(int k = 2; k > 0; --k) {
-      int index = i * coeff + (k + 1) * coeff_y ;
-      printf("%d,", index);
-      glVertex3f(vertices[index].get_x(), vertices[index].get_y(), vertices[index].get_z());
-    }
-    printf("\n");
-  }
-   
-   
   glEnd();
+
+  //Box
+  glBegin(GL_POLYGON);
+  glColor3f(RGB_box[0], RGB_box[1], RGB_box[2]);
+  for (int i = 0; i <  24; i++){
+    glVertex3f(box_vertices_to_draw[i].get_x(), box_vertices_to_draw[i].get_y(), box_vertices_to_draw[i].get_z());
+  }
+  glEnd();
+
   glutSwapBuffers();
   glutPostRedisplay();
 }
@@ -185,14 +206,29 @@ void reshape(int width, int height)
 
 // Catch the input of the player
 void handler_event(unsigned char key, int x, int y) {
+  if(key == 'x') {
+    game = new GameWorld(Vector3D(1,0,0));
+    display_occured = false;
+  }
+  else if( key == 'y') {
+    game = new GameWorld(Vector3D(0,1,0));
+    display_occured = false;
+  }
+  else if (key == 'z') {
+    game = new GameWorld(Vector3D(0,0,-1));
+    display_occured = false;
+  }
+  else if (key == 'c') {
+    game = new GameWorld(Vector3D(1,1,0));
+    display_occured = false;
+  }
   glutPostRedisplay();
 }
 
 
 // Print basic instructions for the player
 void display_init(){
-  printf("Phase 3 : Rotation on rigidbodies \n");
-  printf("touch key d to change the demo !\n");
+  printf("Phase 4: Collision detection between planes and a box \n");
 }
 
 //init opengl functions and game parameters.
@@ -202,7 +238,7 @@ int main(int argc, char** argv)
 
 
   //initiate game physics.
-  game = new GameWorld();
+  game = new GameWorld(Vector3D(0,0,0));
 
   display_init();
 
@@ -210,7 +246,7 @@ int main(int argc, char** argv)
   glutInitDisplayMode(GLUT_DOUBLE);
   glutInitWindowSize(WINDOW_SIZE, WINDOW_SIZE);
   glutInitWindowPosition(WINDOW_POSITION_X, WINDOW_POSITION_Y);
-  glutCreateWindow("Rigidbody animations");
+  glutCreateWindow("Collision detectection of a box in a room");
   glutKeyboardFunc(handler_event);
   glewInit();
   glEnable(GL_DEPTH_TEST);

@@ -17,36 +17,62 @@
 #include "../src/constant.hpp"
 #include "../src/primitive.hpp"
 #include "../src/oc_tree.hpp"
+#include "../src/box.hpp"
+#include "../src/plane.hpp"
 
 #include "game_world.hpp"
 
 using namespace std;
 
-//init rigidbodies
-GameWorld::GameWorld(){
-  init();
+
+GameWorld::GameWorld(Vector3D velocity){
+  init(velocity);
 }
 
-
-void GameWorld::init(){
+//Init walls and box
+void GameWorld::init(Vector3D velocity){
 
   rigidbodies_and_forces = new ForceRegister();
-  
+
   int dx = 1;
   int dy = 1;
   int dz = 1;
   float m = 10;
   Matrix33 rectangle_tensor = Matrix33((1/12.) * m * (pow(dy,2) + pow(dz,2)), 0, 0, 0, (1/12.) * m * (pow(dx,2) + pow(dz,2)), 0, 0, 0, (1/12.) * m * (pow(dx,2) + pow(dy,2)));
 
+  Rigidbody * main_rigidbody = new Rigidbody(Vector3D(0, 0, 0), Vector3D(0.5, 0.5, 0.5), velocity, m, 0.9, 0.9, Quaternion(1,0,0,0), Matrix34::identity_matrix(), rectangle_tensor.inverse());
 
-    main_rigidbody = new Rigidbody(Vector3D(-5, 0, 0), Vector3D(0.5, 0.5, 0.5), Vector3D(1,1.5,0), m, 0.9, 0.9, Quaternion(1,0,0,0), Matrix34::identity_matrix(), rectangle_tensor.inverse());
+  gravity_generator = new RigidbodyGravityGenerator(Vector3D(0,GRAVITY_VALUE,0));
+  rigidbodies_and_forces->add(main_rigidbody, gravity_generator);
 
-    gravity_generator = new RigidbodyGravityGenerator(Vector3D(0,GRAVITY_VALUE,0));
-    rigidbodies_and_forces->add(main_rigidbody, gravity_generator);
+  main_box =  new Box(main_rigidbody, dx, dy, dz, Matrix34::identity_matrix());
+
+  walls = new Plane[5];
+  float room_size = 5;
+  walls[0] = Plane(Vector3D(1,0,0),room_size);
+  walls[1] = Plane(Vector3D(0,1,0), room_size);
+  walls[2] = Plane(Vector3D(0,0,1), room_size);
+  walls[3] = Plane(Vector3D(0,-1,0), room_size);
+  walls[4] = Plane(Vector3D(-1,0,0), room_size);
+
+  primitives = new Primitive*[6];
+
+  for(int i = 0; i < 5; ++i) {
+    primitives[i] = &walls[i];
+  }
+  primitives[5] = main_box;
+
+  octree =  new OcTree(1, Vector3D(), Vector3D(11,11,11));
+
+  datas = new CollisionData(20);
 }
 
-Rigidbody* GameWorld::get_main_rigidbody(){
-  return main_rigidbody;
+Box * GameWorld::get_main_box(){
+  return main_box;
+}
+
+Plane * GameWorld::get_walls(){
+  return walls;
 }
 
 //update physic at each frame.
@@ -57,7 +83,16 @@ void GameWorld::execute(float * current_time){
   call_all_force_generator();
 
   // Integration of every rigidbody
-  main_rigidbody->integrate(FRAME_INTERVAL);
+  main_box->get_rigidbody()->integrate(FRAME_INTERVAL);
+
+  //check collision broadphase
+  octree->check_collision(primitives, 6);
+
+  //check collision narrowphase
+  octree->apply_narrow_phase(datas);
+
+  //reset octree
+  octree->reset_object_array();
 
   //update time
   (*current_time) += FRAME_INTERVAL;
@@ -81,3 +116,14 @@ void GameWorld::call_all_force_generator()
     }
 }
 
+bool GameWorld::collision_occured() {
+  return datas->get_current_size() != 0;
+}
+
+Vector3D GameWorld::get_normal_contact() {
+  return datas->get_contact().get_normal();
+}
+
+void GameWorld::display_contact() {
+  datas->get_contact().display();
+}

@@ -11,9 +11,9 @@
 #define WINDOW_POSITION_Y 100
 
 //camera
-#define CAMERA_EYE_X 5
-#define CAMERA_EYE_Y 5
-#define CAMERA_EYE_Z 5
+#define CAMERA_EYE_X 0
+#define CAMERA_EYE_Y 0
+#define CAMERA_EYE_Z 15
 
 #define CAMERA_VIEW_X 0
 #define CAMERA_VIEW_Y 0
@@ -41,4 +41,9 @@
 /* Rectangle properties*/
 #define VERTEX_PER_SIDE 4
 #define SIDE_NUMBER 6
+
+/* Plane size */
+#define HALF_WIDTH 5
+#define HALF_HEIGHT 5
+
 #endif

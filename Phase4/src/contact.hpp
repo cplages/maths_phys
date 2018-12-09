@@ -15,6 +15,9 @@ public:
   Contact();
   Contact(Vector3D cp, Vector3D cn, float p);
 
+  Vector3D get_normal();
+
+  void display();
 
 
 
